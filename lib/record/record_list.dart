@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:personal_budget/detail/record_detail.dart';
+import 'package:personal_budget/models/record.dart';
+import 'package:personal_budget/record/record_detail.dart';
 
 class RecordList extends StatefulWidget {
   RecordList({Key key}) : super(key: key);
@@ -9,16 +10,20 @@ class RecordList extends StatefulWidget {
 }
 
 class _RecordListState extends State<RecordList> {
-  void _navigateToRecordDetail() {
-    Navigator.push(
+  void _navigateToRecordDetail() async {
+    final record = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => RecordDetail(),
       ),
     );
+
+  setState(() {
+    items.add(record);
+  });
   }
 
-  List<int> items = [0,1,2];
+  List<Record> items = [];
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +51,9 @@ class _RecordListState extends State<RecordList> {
         ),
       ),
       body: ListView.builder(
-          itemCount: 3,
+          itemCount: items.length,
           itemBuilder: (BuildContext context, int index) {
-            return provideListItem(index );
+            return provideListItem(index);
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToRecordDetail,
@@ -57,33 +62,36 @@ class _RecordListState extends State<RecordList> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Minhas finanças')),
-          BottomNavigationBarItem(icon: Icon(Icons.category), title: Text('Categorias')),
-          BottomNavigationBarItem(icon: Icon(Icons.table_chart), title: Text('Relatórios')),
-        ],   
+          BottomNavigationBarItem(
+              icon: Icon(Icons.home), title: Text('Minhas finanças')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.category), title: Text('Categorias')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.table_chart), title: Text('Relatórios')),
+        ],
       ),
     );
   }
 
   Widget provideListItem(int index) {
     return ListTile(
-        title: Text('ALIMENTAÇÃO', 
+      title: Text(
+        items[index].category,
         style: TextStyle(
-          color: Colors.orangeAccent,
-          fontSize: 12,     
-          fontWeight: FontWeight.bold
-        ),),
-        subtitle: Text('Casquinha mista ${items[index]}'),
-        trailing: Column(
-          children: <Widget>[
-            Text('-R\$ 4,00',
-             style: TextStyle(
-               color: Colors.redAccent
-             ),),
-            Text('Dinheiro'),
-          ],
-        ),
-
-      );
+            color: Colors.orangeAccent,
+            fontSize: 12,
+            fontWeight: FontWeight.bold),
+      ),
+      subtitle: Text(items[index].description),
+      trailing: Column(
+        children: <Widget>[
+          Text(
+            'R\$ ${items[index].amount}',
+            style: TextStyle(color: Colors.green),
+          ),
+          Text(items[index].date.toString()),
+        ],
+      ),
+    );
   }
 }

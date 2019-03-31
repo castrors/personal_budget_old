@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:personal_budget/detail/record_list.dart';
+import 'package:personal_budget/record/record_list.dart';
 
 void main() => runApp(MyApp());
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_budget/models/record.dart';
 
 class RecordDetail extends StatefulWidget {
   RecordDetail({Key key}) : super(key: key);
@@ -7,20 +8,34 @@ class RecordDetail extends StatefulWidget {
   _RecordDetailState createState() => _RecordDetailState();
 }
 
+class _RecordData{
+  double amount;
+  String description;
+  String category;
+  DateTime date;
+
+  Record toPersistentModel(){
+    return Record(
+      amount: this.amount,
+      description: this.description,
+      category: this.category,
+      date: this.date);
+  }
+}
+
 class _RecordDetailState extends State<RecordDetail> {
   final _formKey = GlobalKey<FormState>();
   final _formKeyAmount = GlobalKey<FormState>();
+  _RecordData _data = _RecordData();
 
   void _submit() {
-    if (_formKey.currentState.validate()) {
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Processing Data')));
-    }
-    if (_formKeyAmount.currentState.validate()) {
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Processing Data')));
+    if (_formKey.currentState.validate() && _formKeyAmount.currentState.validate()) {
+      _formKey.currentState.save();
+      _formKeyAmount.currentState.save();
+      Navigator.pop(context, _data.toPersistentModel());
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +65,9 @@ class _RecordDetailState extends State<RecordDetail> {
                     return 'Por favor, adicione a quantidade da sua receita.';
                   }
                 },
+                onSaved: (String amount) {
+                  this._data.amount = double.parse(amount);  
+                },
               ),
             ),
           ),
@@ -73,6 +91,9 @@ class _RecordDetailState extends State<RecordDetail> {
                         return 'Por favor, crie uma descrição da sua receita.';
                       }
                     },
+                    onSaved: (String description) {
+                      this._data.description = description;  
+                    },
                   ),
                   TextFormField(
                     decoration:
@@ -82,6 +103,9 @@ class _RecordDetailState extends State<RecordDetail> {
                         return 'Por favor, selecione uma categoria da sua receita.';
                       }
                     },
+                    onSaved: (String category) {
+                      this._data.category = category;  
+                    }, 
                   ),
                   TextFormField(
                     decoration: InputDecoration(hintText: 'Data'),
@@ -89,6 +113,9 @@ class _RecordDetailState extends State<RecordDetail> {
                       if (value.isEmpty) {
                         return 'Por favor, selecione a data da sua receita.';
                       }
+                    },
+                    onSaved: (String date) {
+                      this._data.date = DateTime.now();  
                     },
                   ),
                 ],
