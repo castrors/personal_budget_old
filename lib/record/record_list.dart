@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:personal_budget/bloc/blocs.dart';
 import 'package:personal_budget/models/record.dart';
 import 'package:personal_budget/record/record_detail.dart';
+import 'package:personal_budget/record/record_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecordList extends StatefulWidget {
-  RecordList({Key key}) : super(key: key);
+  final RecordRepository recordRepository;
+  RecordList({Key key, @required this.recordRepository})
+      : assert(recordRepository != null),
+        super(key: key);
 
   @override
   _RecordListState createState() => _RecordListState();
 }
 
 class _RecordListState extends State<RecordList> {
+  RecordBloc _recordBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _recordBloc = RecordBloc(recordRepository: widget.recordRepository);
+    _recordBloc.dispatch(FetchRecord());
+  }
+
   void _navigateToRecordDetail() async {
     final record = await Navigator.push(
       context,
@@ -17,13 +32,11 @@ class _RecordListState extends State<RecordList> {
         builder: (context) => RecordDetail(),
       ),
     );
-
-    setState(() {
-      items.add(record);
-    });
+    if(record!=null){
+      _recordBloc.dispatch(AddRecord(record: record));
+      _recordBloc.dispatch(FetchRecord());
+    }
   }
-
-  List<Record> items = [];
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +63,28 @@ class _RecordListState extends State<RecordList> {
           preferredSize: Size(0.0, 80.0),
         ),
       ),
-      body: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (BuildContext context, int index) {
-            return provideListItem(index);
-          }),
+      body: Center(
+          child: BlocBuilder(
+              bloc: _recordBloc,
+              builder: (_, RecordState state) {
+                if (state is RecordEmpty) {
+                  return Center(child: Text('RecordEmpty'));
+                }
+                if (state is RecordLoading) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (state is RecordLoaded) {
+                  final records = state.records;
+                  return ListView.builder(
+                      itemCount: records.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return provideListItem(records[index]);
+                      });
+                }
+                if(state is RecordError){
+                  return Center(child: Text('RecordError'));
+                }
+              })),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToRecordDetail,
         tooltip: 'Increment',
@@ -73,20 +103,20 @@ class _RecordListState extends State<RecordList> {
     );
   }
 
-  Widget provideListItem(int index) {
+  Widget provideListItem(Record record) {
     return ListTile(
       title: Text(
-        items[index].category,
+        record.category,
         style: TextStyle(
             color: Colors.orangeAccent,
             fontSize: 12,
             fontWeight: FontWeight.bold),
       ),
-      subtitle: Text(items[index].description),
+      subtitle: Text(record.description),
       trailing: Column(
         children: <Widget>[
-          provideAmound(items[index]),
-          Text(items[index].date.toString()),
+          provideAmound(record),
+          Text(record.date.toString()),
         ],
       ),
     );
