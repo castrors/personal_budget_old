@@ -18,9 +18,9 @@ class _RecordListState extends State<RecordList> {
       ),
     );
 
-  setState(() {
-    items.add(record);
-  });
+    setState(() {
+      items.add(record);
+    });
   }
 
   List<Record> items = [];
@@ -85,13 +85,22 @@ class _RecordListState extends State<RecordList> {
       subtitle: Text(items[index].description),
       trailing: Column(
         children: <Widget>[
-          Text(
-            'R\$ ${items[index].amount}',
-            style: TextStyle(color: Colors.green),
-          ),
+          provideAmound(items[index]),
           Text(items[index].date.toString()),
         ],
       ),
     );
+  }
+
+  provideAmound(Record item) {
+    return item.isExpense
+        ? Text(
+            '- R\$ ${item.amount}',
+            style: TextStyle(color: Colors.red),
+          )
+        : Text(
+            'R\$ ${item.amount}',
+            style: TextStyle(color: Colors.green),
+          );
   }
 }

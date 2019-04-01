@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:personal_budget/models/record.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class RecordDetail extends StatefulWidget {
   RecordDetail({Key key}) : super(key: key);
@@ -8,18 +10,19 @@ class RecordDetail extends StatefulWidget {
   _RecordDetailState createState() => _RecordDetailState();
 }
 
-class _RecordData{
+class _RecordData {
   double amount;
   String description;
   String category;
   DateTime date;
 
-  Record toPersistentModel(){
+  Record toPersistentModel(bool isExpense) {
     return Record(
-      amount: this.amount,
-      description: this.description,
-      category: this.category,
-      date: this.date);
+        amount: this.amount,
+        description: this.description,
+        category: this.category,
+        date: this.date,
+        isExpense: isExpense);
   }
 }
 
@@ -28,20 +31,37 @@ class _RecordDetailState extends State<RecordDetail> {
   final _formKeyAmount = GlobalKey<FormState>();
   _RecordData _data = _RecordData();
 
+  bool isSwitched = false;
+
   void _submit() {
-    if (_formKey.currentState.validate() && _formKeyAmount.currentState.validate()) {
+    if (_formKey.currentState.validate() &&
+        _formKeyAmount.currentState.validate()) {
       _formKey.currentState.save();
       _formKeyAmount.currentState.save();
-      Navigator.pop(context, _data.toPersistentModel());
+      Navigator.pop(context, _data.toPersistentModel(isSwitched));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightGreen.shade500,
+        actions: <Widget>[
+          Switch(
+            value: isSwitched,
+            onChanged: (value) {
+              setState(() {
+                isSwitched = value;
+              });
+            },
+            activeTrackColor: Colors.lightGreenAccent,
+            activeColor: Colors.green,
+            inactiveThumbColor: Colors.red,
+            inactiveTrackColor: Colors.red.shade300,
+          ),
+        ],
+        backgroundColor:
+            isSwitched ? Colors.redAccent : Colors.lightGreen.shade500,
         bottom: PreferredSize(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(80.0, 0.0, 16.0, 36.0),
@@ -51,7 +71,8 @@ class _RecordDetailState extends State<RecordDetail> {
                 keyboardType: TextInputType.number,
                 style: TextStyle(color: Colors.white, fontSize: 40),
                 decoration: InputDecoration(
-                    labelText: 'Valor da Receita',
+                    labelText:
+                        isSwitched ?  'Valor da Despesa': 'Valor da Receita',
                     prefixText: 'R\$ ',
                     prefixStyle: TextStyle(color: Colors.white, fontSize: 30),
                     hintStyle: TextStyle(color: Colors.white, fontSize: 20),
@@ -66,7 +87,7 @@ class _RecordDetailState extends State<RecordDetail> {
                   }
                 },
                 onSaved: (String amount) {
-                  this._data.amount = double.parse(amount);  
+                  this._data.amount = double.parse(amount);
                 },
               ),
             ),
@@ -92,7 +113,7 @@ class _RecordDetailState extends State<RecordDetail> {
                       }
                     },
                     onSaved: (String description) {
-                      this._data.description = description;  
+                      this._data.description = description;
                     },
                   ),
                   TextFormField(
@@ -104,18 +125,22 @@ class _RecordDetailState extends State<RecordDetail> {
                       }
                     },
                     onSaved: (String category) {
-                      this._data.category = category;  
-                    }, 
+                      this._data.category = category;
+                    },
                   ),
-                  TextFormField(
-                    decoration: InputDecoration(hintText: 'Data'),
+                  DateTimePickerFormField(
+                    inputType: InputType.date,
+                    format: DateFormat('yyyy-MM-dd'),
+                    editable: true,
+                    decoration: InputDecoration(
+                        labelText: 'Data', hasFloatingPlaceholder: false),
                     validator: (value) {
-                      if (value.isEmpty) {
+                      if (value == null) {
                         return 'Por favor, selecione a data da sua receita.';
                       }
                     },
-                    onSaved: (String date) {
-                      this._data.date = DateTime.now();  
+                    onSaved: (DateTime date) {
+                      this._data.date = date;
                     },
                   ),
                 ],

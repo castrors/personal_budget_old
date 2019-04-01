@@ -6,16 +6,19 @@ class Record extends Equatable {
   final String description;
   final String category;
   final DateTime date;
+  final bool isExpense;
 
   Record({
     this.amount,
     this.description,
     this.category,
-    this.date
+    this.date,
+    this.isExpense
   }) : super ([
       amount,
       description,
       category,
-      date
+      date,
+      isExpense
   ]);
 }
