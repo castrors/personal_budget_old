@@ -19,7 +19,7 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     if(event is FetchRecord){
       yield RecordLoading();
       try {
-        final List<Record> records = recordRepository.getRecords();
+        final List<Record> records = await recordRepository.getRecords();
         yield RecordLoaded(records: records);
       } catch (e) {
         yield RecordError();
