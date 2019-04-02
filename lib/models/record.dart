@@ -22,8 +22,8 @@ class Record extends Equatable {
       amount: data["amount"],
       description: data["description"],
       category: data["category"],
-      date: data["date"],
-      isExpense: data["is_expense"]);
+      date: DateTime.fromMicrosecondsSinceEpoch(data["date"]),
+      isExpense: data["is_expense"] == 1);
 
   Map<String, dynamic> toJson() => {
         "id": id,

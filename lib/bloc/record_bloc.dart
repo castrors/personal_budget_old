@@ -19,7 +19,8 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     if(event is FetchRecord){
       yield RecordLoading();
       try {
-        final List<Record> records = await recordRepository.getRecords();
+        final List<Map> recordsMap = await recordRepository.getRecords();
+        final List<Record> records = recordsMap.map((item) => Record.fromJson(item)).toList();
         yield RecordLoaded(records: records);
       } catch (e) {
         yield RecordError();
