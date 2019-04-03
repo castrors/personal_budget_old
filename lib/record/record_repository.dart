@@ -37,4 +37,14 @@ class RecordRepository {
       
     });
   }
+
+  updateRecord(Record record) async {
+    Database database = await createDatabase();
+    await database.transaction((txn) async {
+      int id1 = await txn.rawUpdate(
+        'UPDATE Record SET amount = ?, description = ?, category = ?, date = ?, is_expense = ? WHERE id = ?',
+        ['${record.amount}', '${record.description}', '${record.category}', '${record.date.microsecondsSinceEpoch}', '${record.isExpense ? 1 : 0}', '${record.id}']);
+      print('updated1: $id1'); 
+    });
+  }
 }

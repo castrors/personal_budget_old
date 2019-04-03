@@ -25,15 +25,19 @@ class _RecordListState extends State<RecordList> {
     _recordBloc.dispatch(FetchRecord());
   }
 
-  void _navigateToRecordDetail() async {
-    final record = await Navigator.push(
+  void _navigateToRecordDetail(Record record) async {
+    final recordResult = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RecordDetail(),
+        builder: (context) => RecordDetail(record: record),
       ),
     );
-    if(record!=null){
-      _recordBloc.dispatch(AddRecord(record: record));
+    if (recordResult != null) {
+      if (record != null) {
+        _recordBloc.dispatch(UpdateRecord(record: recordResult.clone(record.id)));
+      } else {
+        _recordBloc.dispatch(AddRecord(record: recordResult));
+      }
       _recordBloc.dispatch(FetchRecord());
     }
   }
@@ -81,12 +85,14 @@ class _RecordListState extends State<RecordList> {
                         return provideListItem(records[index]);
                       });
                 }
-                if(state is RecordError){
+                if (state is RecordError) {
                   return Center(child: Text('RecordError'));
                 }
               })),
       floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToRecordDetail,
+        onPressed: (){
+          _navigateToRecordDetail(null);
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
@@ -119,6 +125,9 @@ class _RecordListState extends State<RecordList> {
           Text(record.date.toString()),
         ],
       ),
+      onTap: () {
+        _navigateToRecordDetail(record);
+      },
     );
   }
 

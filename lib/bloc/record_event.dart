@@ -11,3 +11,9 @@ class AddRecord extends RecordEvent {
 
   AddRecord({@required this.record});
 }
+
+class UpdateRecord extends RecordEvent {
+  final Record record;
+
+  UpdateRecord({@required this.record});
+}

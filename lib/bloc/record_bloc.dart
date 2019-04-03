@@ -35,6 +35,15 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
         yield RecordError();
       }
     }
+    if(event is UpdateRecord){
+      yield RecordLoading();
+      try {
+        final record = recordRepository.updateRecord(event.record);
+        yield RecordSaved(record: record);
+      } catch (e) {
+        yield RecordError();
+      }
+    }
   }
 
 }

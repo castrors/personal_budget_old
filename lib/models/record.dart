@@ -33,4 +33,12 @@ class Record extends Equatable {
         "date": date,
         "is_expense": isExpense,
       };
+
+  Record clone(int id) => Record(
+      id: id,
+      amount: amount,
+      description: this.description,
+      category: this.category,
+      date: this.date,
+      isExpense: this.isExpense);
 }
