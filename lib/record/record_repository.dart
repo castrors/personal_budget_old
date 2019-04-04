@@ -47,4 +47,13 @@ class RecordRepository {
       print('updated1: $id1'); 
     });
   }
+
+  deleteRecord(Record record) async {
+    Database database = await createDatabase();
+    await database.transaction((txn) async {
+      int id1 = await txn.rawDelete(
+        'DELETE FROM Record WHERE id = ?', ['${record.id}']);
+      print('deleted: $id1'); 
+    });
+  }
 }

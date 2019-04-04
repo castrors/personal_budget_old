@@ -44,6 +44,15 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
         yield RecordError();
       }
     }
+    if(event is DeleteRecord){
+      yield RecordLoading();
+      try {
+        final record = recordRepository.deleteRecord(event.record);
+        yield RecordDeleted(record: record);
+      } catch (e) {
+        yield RecordError();
+      }
+    }
   }
 
 }

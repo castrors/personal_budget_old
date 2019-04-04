@@ -34,7 +34,8 @@ class _RecordListState extends State<RecordList> {
     );
     if (recordResult != null) {
       if (record != null) {
-        _recordBloc.dispatch(UpdateRecord(record: recordResult.clone(record.id)));
+        _recordBloc
+            .dispatch(UpdateRecord(record: recordResult.clone(record.id)));
       } else {
         _recordBloc.dispatch(AddRecord(record: recordResult));
       }
@@ -90,7 +91,7 @@ class _RecordListState extends State<RecordList> {
                 }
               })),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: () {
           _navigateToRecordDetail(null);
         },
         tooltip: 'Increment',
@@ -110,24 +111,34 @@ class _RecordListState extends State<RecordList> {
   }
 
   Widget provideListItem(Record record) {
-    return ListTile(
-      title: Text(
-        record.category,
-        style: TextStyle(
-            color: Colors.orangeAccent,
-            fontSize: 12,
-            fontWeight: FontWeight.bold),
-      ),
-      subtitle: Text(record.description),
-      trailing: Column(
-        children: <Widget>[
-          provideAmound(record),
-          Text(record.date.toString()),
-        ],
-      ),
-      onTap: () {
-        _navigateToRecordDetail(record);
+    return Dismissible(
+      key: Key(record.description),
+      onDismissed: (direction) {
+        _recordBloc.dispatch(DeleteRecord(record: record));
+        _recordBloc.dispatch(FetchRecord());
+
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text("${record.id} dismissed")));
       },
+      child: ListTile(
+        title: Text(
+          record.category,
+          style: TextStyle(
+              color: Colors.orangeAccent,
+              fontSize: 12,
+              fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(record.description),
+        trailing: Column(
+          children: <Widget>[
+            provideAmound(record),
+            Text(record.date.toString()),
+          ],
+        ),
+        onTap: () {
+          _navigateToRecordDetail(record);
+        },
+      ),
     );
   }
 

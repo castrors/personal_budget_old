@@ -17,3 +17,9 @@ class UpdateRecord extends RecordEvent {
 
   UpdateRecord({@required this.record});
 }
+
+class DeleteRecord extends RecordEvent {
+  final Record record;
+
+  DeleteRecord({@required this.record});
+}

@@ -26,4 +26,12 @@ class RecordSaved extends RecordState {
         super([record]);
 }
 
+class RecordDeleted extends RecordState {
+  final Record record;
+
+  RecordDeleted({@required this.record})
+      : assert(record != null),
+        super([record]);
+}
+
 class RecordError extends RecordState {}
