@@ -97,16 +97,6 @@ class _RecordListState extends State<RecordList> {
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home), title: Text('Minhas finanças')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.category), title: Text('Categorias')),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.table_chart), title: Text('Relatórios')),
-        ],
-      ),
     );
   }
 

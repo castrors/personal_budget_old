@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:personal_budget/home.dart';
 
 import 'package:personal_budget/record/record_list.dart';
 import 'package:personal_budget/record/record_repository.dart';
@@ -28,7 +29,7 @@ class _AppState extends State<App> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(primarySwatch: Colors.pink, primaryColor: Colors.teal),
-      home: RecordList(recordRepository: widget.recordRepository),
+      home: Home(recordRepository: widget.recordRepository),
     );
   }
 }
