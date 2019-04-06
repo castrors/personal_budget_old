@@ -23,6 +23,7 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
         final List<Record> records = recordsMap.map((item) => Record.fromJson(item)).toList();
         yield RecordLoaded(records: records);
       } catch (e) {
+        print(e.toString());
         yield RecordError();
       }
     }

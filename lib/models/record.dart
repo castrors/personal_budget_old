@@ -22,7 +22,7 @@ class Record extends Equatable {
       amount: data["amount"],
       description: data["description"],
       category: data["category"],
-      date: DateTime.fromMicrosecondsSinceEpoch(data["date"]),
+      date: DateTime.fromMicrosecondsSinceEpoch(int.parse(data["date"])),
       isExpense: data["is_expense"] == 1);
 
   Map<String, dynamic> toJson() => {
