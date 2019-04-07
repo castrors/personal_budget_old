@@ -58,7 +58,7 @@ class RadioItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Container(
       alignment: Alignment.center,
-      margin: new EdgeInsets.all(15.0),
+      margin: new EdgeInsets.all(12.0),
       child: new Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[

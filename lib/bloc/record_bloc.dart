@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:personal_budget/bloc/blocs.dart';
 import 'package:personal_budget/models/record.dart';
-import 'package:personal_budget/record/record_repository.dart';
+import 'package:personal_budget/data/record_repository.dart';
 
 class RecordBloc extends Bloc<RecordEvent, RecordState> {
 
@@ -20,7 +20,9 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
       yield RecordLoading();
       try {
         final List<Map> recordsMap = await recordRepository.getRecords();
+        print(recordsMap);
         final List<Record> records = recordsMap.map((item) => Record.fromJson(item)).toList();
+        print(records);
         yield RecordLoaded(records: records);
       } catch (e) {
         print(e.toString());

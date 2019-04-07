@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:personal_budget/bloc/blocs.dart';
+import 'package:personal_budget/main.dart';
 import 'package:personal_budget/models/record.dart';
 import 'package:personal_budget/record/record_detail.dart';
-import 'package:personal_budget/record/record_repository.dart';
+import 'package:personal_budget/data/record_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RecordList extends StatefulWidget {
-  final RecordRepository recordRepository;
-  RecordList({Key key, @required this.recordRepository})
-      : assert(recordRepository != null),
-        super(key: key);
 
   @override
   _RecordListState createState() => _RecordListState();
@@ -18,12 +15,6 @@ class RecordList extends StatefulWidget {
 class _RecordListState extends State<RecordList> {
   RecordBloc _recordBloc;
 
-  @override
-  void initState() {
-    super.initState();
-    _recordBloc = RecordBloc(recordRepository: widget.recordRepository);
-    _recordBloc.dispatch(FetchRecord());
-  }
 
   void _navigateToRecordDetail(Record record) async {
     final recordResult = await Navigator.push(
@@ -43,8 +34,12 @@ class _RecordListState extends State<RecordList> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
+    _recordBloc = App.of(context).recordBloc;
+    _recordBloc.dispatch(FetchRecord());
+
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(

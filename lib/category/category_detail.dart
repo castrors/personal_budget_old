@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/category_data.dart';
 import 'package:personal_budget/widget/category_colors_widget.dart';
 
 final colorsKey = new GlobalKey<CategoryColorsWidgetState>();
+
 class CategoryDetail extends StatefulWidget {
-  CategoryDetail({Key key}) : super(key: key);
+  final Category category;
+
+  CategoryDetail({Key key, this.category}) : super(key: key);
 
   @override
   _CategoryDetailState createState() => _CategoryDetailState();
@@ -13,15 +17,18 @@ class CategoryDetail extends StatefulWidget {
 class _CategoryDetailState extends State<CategoryDetail> {
   final _formKey = GlobalKey<FormState>();
   CategoryData _data = CategoryData();
+
   void _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      Navigator.pop(context, _data.toPersistentModel(colorsKey.currentState.getSelectedColor));
+      Navigator.pop(context,
+          _data.toPersistentModel(colorsKey.currentState.getSelectedColor));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    Category category = widget.category;
     return Scaffold(
       appBar: AppBar(
         title: Text('Nova Categoria'),
@@ -48,11 +55,11 @@ class _CategoryDetailState extends State<CategoryDetail> {
                         fontWeight: FontWeight.w300),
                   ),
                   TextFormField(
-                    initialValue: "",
+                    initialValue: category != null ? category.title : "",
                     decoration: InputDecoration(hintText: 'Nome da categoria'),
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'Por favor, selecione uma categoria da sua receita.';
+                        return 'Por favor, nomeie a sua categoria.';
                       }
                     },
                     onSaved: (String title) {
