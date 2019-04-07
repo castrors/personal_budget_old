@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_budget/category/category_detail.dart';
 
 class CategoryList extends StatefulWidget {
   @override
@@ -7,6 +8,20 @@ class CategoryList extends StatefulWidget {
 
 class _CategoryListState extends State<CategoryList> {
   List<String> _list = ['Alimentação', 'Educação', 'Financeiro'];
+
+void _navigateToCategoryDetail() async {
+  final categoryResult = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoryDetail(),
+      ),
+    );
+    if (categoryResult != null) {
+        // _recordBloc.dispatch(AddRecord(record: recordResult));
+        // _recordBloc.dispatch(FetchRecord());
+    }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +63,7 @@ class _CategoryListState extends State<CategoryList> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: _navigateToCategoryDetail,
       ),
     );
   }

@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 class Category extends Equatable {
   final int id;
   final String title;
-  final String color;
+  final int color;
 
   Category(
       {this.id,
