@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:personal_budget/bloc/blocs.dart';
+import 'package:personal_budget/main.dart';
+import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/record.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:personal_budget/models/record_data.dart';
 import 'package:personal_budget/widget/amount_widget.dart';
 import 'package:personal_budget/widget/category_widget.dart';
@@ -21,6 +23,7 @@ class _RecordDetailState extends State<RecordDetail> {
   final _formKeyAmount = GlobalKey<FormState>();
   RecordData _data = RecordData();
   bool isSwitched = false;
+  CategoryBloc _categoryBloc;
 
   void _submit(bool isExpense) {
     if (_formKey.currentState.validate() &&
@@ -34,6 +37,8 @@ class _RecordDetailState extends State<RecordDetail> {
   @override
   Widget build(BuildContext context) {
     Record record = widget.record;
+    _categoryBloc = App.of(context).categoryBloc;
+    _categoryBloc.dispatch(FetchCategory());
 
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +47,7 @@ class _RecordDetailState extends State<RecordDetail> {
             value: isSwitched,
             onChanged: (value) {
               setState(() {
-                  isSwitched = value;
+                isSwitched = value;
               });
             },
             activeTrackColor: Colors.lightGreenAccent,
@@ -74,7 +79,19 @@ class _RecordDetailState extends State<RecordDetail> {
               child: Column(
                 children: <Widget>[
                   DescriptionWidget(record: record, data: _data),
-                  CategoryWidget(record: record, data: _data),
+                  BlocBuilder(
+                      bloc: _categoryBloc,
+                      builder: (_, CategoryState state) {
+                        if(state is CategoryLoaded){
+                          return CategoryWidget(record: record, data: _data, categories: state.categories);
+                        }
+                        if(state is CategoryLoading){
+                          return CircularProgressIndicator();
+                        }
+                        if(state is CategoryEmpty || state is CategoryError){
+                          return CategoryWidget(record: record, data: _data, categories: [Category(title: 'UNCATEGORIZED', color: Colors.red.value)]);
+                        }
+                      }),
                   DatePickerWidget(record: record, data: _data),
                 ],
               ),
@@ -91,5 +108,11 @@ class _RecordDetailState extends State<RecordDetail> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
+  }
+
+  @override
+  void dispose() {
+    _categoryBloc.dispose();
+    super.dispose();
   }
 }
