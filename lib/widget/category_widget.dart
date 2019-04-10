@@ -21,41 +21,35 @@ class CategoryWidget extends StatefulWidget {
 }
 
 class _CategoryWidgetState extends State<CategoryWidget> {
-  String _currentCategory;
+  Category _currentCategory;
 
-  List<DropdownMenuItem<String>> getDropDownMenuItems(
+  List<DropdownMenuItem<Category>> getDropDownMenuItems(
       List<Category> categories) {
     return categories
         .map((category) => DropdownMenuItem(
-            value: category.title, child: new Text(category.title)))
+            value: category, child: Text(category.title)))
         .toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FormField(
-      builder: (FormFieldState formState) {
-        return InputDecorator(
-            decoration: InputDecoration(
-              icon: const Icon(Icons.category),
-              labelText: 'Categoria',
-            ),
-            child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-              value: _currentCategory,
-              items: getDropDownMenuItems(widget.categories),
-              onChanged: changedDropDownItem,
-            )));
-      },
-      onSaved: (String category) {
-        widget._data.category = category;
-      },
-    );
+    return InputDecorator(
+        decoration: InputDecoration(
+          icon: const Icon(Icons.category),
+          labelText: 'Categoria',
+        ),
+        child: DropdownButtonHideUnderline(
+            child: DropdownButton<Category>(
+          value: _currentCategory,
+          items: getDropDownMenuItems(widget.categories),
+          onChanged: changedDropDownItem,
+        )));
   }
 
-  void changedDropDownItem(String selectedCategory) {
+  void changedDropDownItem(Category selectedCategory) {
     setState(() {
-      _currentCategory = selectedCategory;  
+      this.widget._data.category = selectedCategory.title;
+      _currentCategory = selectedCategory;
     });
   }
 }
