@@ -1,9 +1,10 @@
+import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/record.dart';
 
 class RecordData {
   double amount;
   String description;
-  String category;
+  Category category;
   DateTime date;
 
   Record toPersistentModel(bool isExpense) {

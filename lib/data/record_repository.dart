@@ -7,13 +7,13 @@ class RecordRepository {
   RecordRepository({this.database});
 
   Future<List<Map>> getRecords() async {
-    return await database.rawQuery('SELECT * FROM Record');
+    return await database.rawQuery('SELECT * FROM Record INNER JOIN Category on Category.id = Record.category_id');
   }
 
   addRecord(Record record) async {
     await database.transaction((txn) async {
       int id1 = await txn.rawInsert(
-          'INSERT INTO Record(amount, description, category, date, is_expense) VALUES(${record.amount}, "${record.description}", "${record.category}", ${record.date.microsecondsSinceEpoch}, ${record.isExpense ? 1 : 0})');
+          'INSERT INTO Record(amount, description, category_id, date, is_expense) VALUES(${record.amount}, "${record.description}", "${record.category.id}", ${record.date.microsecondsSinceEpoch}, ${record.isExpense ? 1 : 0})');
       print('inserted1: $id1');
     });
   }
@@ -21,11 +21,11 @@ class RecordRepository {
   updateRecord(Record record) async {
     await database.transaction((txn) async {
       int id1 = await txn.rawUpdate(
-          'UPDATE Record SET amount = ?, description = ?, category = ?, date = ?, is_expense = ? WHERE id = ?',
+          'UPDATE Record SET amount = ?, description = ?, category_id = ?, date = ?, is_expense = ? WHERE id = ?',
           [
             '${record.amount}',
             '${record.description}',
-            '${record.category}',
+            '${record.category.id}',
             '${record.date.microsecondsSinceEpoch}',
             '${record.isExpense ? 1 : 0}',
             '${record.id}'

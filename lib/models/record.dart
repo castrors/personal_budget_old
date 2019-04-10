@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:personal_budget/models/category.dart';
 
 class Record extends Equatable {
   final int id;
   final double amount;
   final String description;
-  final String category;
+  final Category category;
   final DateTime date;
   final bool isExpense;
 
@@ -18,20 +19,20 @@ class Record extends Equatable {
       : super([id, amount, description, category, date, isExpense]);
 
   factory Record.fromJson(Map<String, dynamic> data) => Record(
-      id: data["id"],
-      amount: data["amount"],
-      description: data["description"],
-      category: data["category"],
-      date: DateTime.fromMicrosecondsSinceEpoch(data["date"]),
-      isExpense: data["is_expense"] == 1);
+      id: data['id'],
+      amount: data['amount'],
+      description: data['description'],
+      category: Category(id:data['category_id'], title: data['title'], color: data['color']),
+      date: DateTime.fromMicrosecondsSinceEpoch(data['date']),
+      isExpense: data['is_expense'] == 1);
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "amount": amount,
-        "description": description,
-        "category": category,
-        "date": date,
-        "is_expense": isExpense,
+        'id': id,
+        'amount': amount,
+        'description': description,
+        'category_id': category.id,
+        'date': date,
+        'is_expense': isExpense,
       };
 
   Record clone(int id) => Record(

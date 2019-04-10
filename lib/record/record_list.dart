@@ -107,9 +107,9 @@ class _RecordListState extends State<RecordList> {
       },
       child: ListTile(
         title: Text(
-          record.category,
+          record.category.title,
           style: TextStyle(
-              color: Colors.orangeAccent,
+              color: Color(record.category.color),
               fontSize: 12,
               fontWeight: FontWeight.bold),
         ),

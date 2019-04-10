@@ -48,7 +48,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
 
   void changedDropDownItem(Category selectedCategory) {
     setState(() {
-      this.widget._data.category = selectedCategory.title;
+      this.widget._data.category = selectedCategory;
       _currentCategory = selectedCategory;
     });
   }
