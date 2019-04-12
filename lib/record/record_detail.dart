@@ -22,7 +22,7 @@ class _RecordDetailState extends State<RecordDetail> {
   final _formKey = GlobalKey<FormState>();
   final _formKeyAmount = GlobalKey<FormState>();
   RecordData _data = RecordData();
-  bool isSwitched = false;
+  bool isSwitched;
   CategoryBloc _categoryBloc;
 
   void _submit(bool isExpense) {
@@ -31,6 +31,17 @@ class _RecordDetailState extends State<RecordDetail> {
       _formKey.currentState.save();
       _formKeyAmount.currentState.save();
       Navigator.pop(context, _data.toPersistentModel(isExpense));
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    if(widget.record != null){
+      isSwitched = widget.record.isExpense;
+    } else {
+      isSwitched = false;
     }
   }
 
