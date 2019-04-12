@@ -36,6 +36,17 @@ class _CategoryWidgetState extends State<CategoryWidget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.record != null) {
+      Category category = widget.record.category;
+      if (category != null) {
+        changedDropDownItem(category);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return InputDecorator(
         decoration: InputDecoration(
