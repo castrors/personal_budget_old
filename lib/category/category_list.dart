@@ -100,7 +100,7 @@ class _CategoryListState extends State<CategoryList> {
       },
       child: ListTile(
         title: Text(
-          category.title,
+          category.title.toUpperCase(),
           style: TextStyle(
               color: Color(category.color),
               fontSize: 12,

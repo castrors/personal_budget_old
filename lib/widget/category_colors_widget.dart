@@ -15,16 +15,16 @@ class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
   @override
   void initState() {
     super.initState();
-    radioModels.add(RadioModel(false, Colors.orangeAccent));
-    radioModels.add(RadioModel(false, Colors.green));
-    radioModels.add(RadioModel(false, Colors.indigoAccent));
-    radioModels.add(RadioModel(false, Colors.purple));
-    radioModels.add(RadioModel(false, Colors.red));
-    radioModels.add(RadioModel(false, Colors.yellow));
-    radioModels.add(RadioModel(false, Colors.greenAccent));
-    radioModels.add(RadioModel(false, Colors.lightBlue));
-    radioModels.add(RadioModel(false, Colors.purpleAccent));
-    radioModels.add(RadioModel(false, Colors.redAccent));
+    radioModels.add(RadioModel(false, Color(0xfff5a623)));
+    radioModels.add(RadioModel(false, Color(0xff3eba65)));
+    radioModels.add(RadioModel(false, Color(0xff4a90e2)));
+    radioModels.add(RadioModel(false, Color(0xffbb37d6)));
+    radioModels.add(RadioModel(false, Color(0xffb83030)));
+    radioModels.add(RadioModel(false, Color(0xffedc100)));
+    radioModels.add(RadioModel(false, Color(0xff7ed321)));
+    radioModels.add(RadioModel(false, Color(0xff4adbe2)));
+    radioModels.add(RadioModel(false, Color(0xffe24a8b)));
+    radioModels.add(RadioModel(false, Color(0xffff5a4b)));
 
     Category category = widget.category;
     if (category != null) {

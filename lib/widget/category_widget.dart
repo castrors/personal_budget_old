@@ -27,7 +27,11 @@ class _CategoryWidgetState extends State<CategoryWidget> {
       List<Category> categories) {
     return categories
         .map((category) => DropdownMenuItem(
-            value: category, child: Text(category.title)))
+            value: category,
+            child: Text(
+              category.title.toUpperCase(),
+              style: TextStyle(color: Color(category.color)),
+            )))
         .toList();
   }
 
