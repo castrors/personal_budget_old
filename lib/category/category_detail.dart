@@ -21,8 +21,11 @@ class _CategoryDetailState extends State<CategoryDetail> {
   void _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      Navigator.pop(context,
-          _data.toPersistentModel(colorsKey.currentState.getSelectedColor));
+      Navigator.pop(
+          context,
+          _data.toPersistentModel(
+              widget.category != null ? widget.category.id : null,
+              colorsKey.currentState.getSelectedColor));
     }
   }
 
@@ -74,7 +77,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
             ),
             Text('SELECIONE UMA COR PARA A CATEGORIA:'),
             Flexible(
-              child: CategoryColorsWidget(key: colorsKey),
+              child: CategoryColorsWidget(key: colorsKey, category: category),
               flex: 1,
             )
           ],

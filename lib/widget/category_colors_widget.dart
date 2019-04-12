@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:personal_budget/models/category.dart';
 
 class CategoryColorsWidget extends StatefulWidget {
-  CategoryColorsWidget({Key key}) : super(key: key);
+  final Category category;
+  CategoryColorsWidget({Key key, this.category}) : super(key: key);
 
   @override
   CategoryColorsWidgetState createState() => CategoryColorsWidgetState();
@@ -23,6 +25,19 @@ class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
     radioModels.add(RadioModel(false, Colors.lightBlue));
     radioModels.add(RadioModel(false, Colors.purpleAccent));
     radioModels.add(RadioModel(false, Colors.redAccent));
+
+    Category category = widget.category;
+    if (category != null) {
+      setSelected(category.color);
+    }
+  }
+
+  void setSelected(int selectedColor) {
+    radioModels.forEach((radio) {
+      if (radio.color.value == selectedColor) {
+        radio.isSelected = true;
+      }
+    });
   }
 
   @override
@@ -46,8 +61,13 @@ class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
     );
   }
 
-  int get getSelectedColor{
-    return radioModels.where((radio) => radio.isSelected).toList().first.color.value;
+  int get getSelectedColor {
+    return radioModels
+        .where((radio) => radio.isSelected)
+        .toList()
+        .first
+        .color
+        .value;
   }
 }
 

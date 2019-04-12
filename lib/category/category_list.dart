@@ -20,8 +20,13 @@ class _CategoryListState extends State<CategoryList> {
         builder: (context) => CategoryDetail(category: category),
       ),
     );
+
     if (categoryResult != null) {
-      _categoryBloc.dispatch(AddCategory(category: categoryResult));
+      if (categoryResult.id != null) {
+        _categoryBloc.dispatch(UpdateCategory(category: categoryResult));
+      } else {
+        _categoryBloc.dispatch(AddCategory(category: categoryResult));
+      }
       _categoryBloc.dispatch(FetchCategory());
     }
   }
@@ -91,7 +96,7 @@ class _CategoryListState extends State<CategoryList> {
         _categoryBloc.dispatch(FetchCategory());
 
         Scaffold.of(context)
-            .showSnackBar(SnackBar(content: Text("${category.id} dismissed")));
+            .showSnackBar(SnackBar(content: Text("${category.title} removida com sucesso.")));
       },
       child: ListTile(
         title: Text(
