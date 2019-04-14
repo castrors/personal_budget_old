@@ -22,7 +22,7 @@ class _RecordDetailState extends State<RecordDetail> {
   final _formKey = GlobalKey<FormState>();
   final _formKeyAmount = GlobalKey<FormState>();
   RecordData _data = RecordData();
-  bool isSwitched;
+  bool isExpense;
   CategoryBloc _categoryBloc;
 
   void _submit(bool isExpense) {
@@ -39,9 +39,9 @@ class _RecordDetailState extends State<RecordDetail> {
     super.initState();
 
     if(widget.record != null){
-      isSwitched = widget.record.isExpense;
+      isExpense = widget.record.isExpense;
     } else {
-      isSwitched = false;
+      isExpense = true;
     }
   }
 
@@ -55,10 +55,10 @@ class _RecordDetailState extends State<RecordDetail> {
       appBar: AppBar(
         actions: <Widget>[
           Switch(
-            value: isSwitched,
+            value: isExpense,
             onChanged: (value) {
               setState(() {
-                isSwitched = value;
+                isExpense = value;
               });
             },
             activeTrackColor: Colors.lightGreenAccent,
@@ -68,14 +68,14 @@ class _RecordDetailState extends State<RecordDetail> {
           ),
         ],
         backgroundColor:
-            isSwitched ? Colors.redAccent : Colors.lightGreen.shade500,
+            isExpense ? Colors.redAccent : Colors.lightGreen.shade500,
         bottom: PreferredSize(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(80.0, 0.0, 16.0, 36.0),
             child: Form(
               key: _formKeyAmount,
               child: AmountWidget(
-                  record: record, isSwitched: isSwitched, data: _data),
+                  record: record, isSwitched: isExpense, data: _data),
             ),
           ),
           preferredSize: Size(0.0, 100.0),
@@ -89,7 +89,7 @@ class _RecordDetailState extends State<RecordDetail> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
-                  DescriptionWidget(record: record, data: _data),
+                  DescriptionWidget(record: record, data: _data, isExpense: isExpense),
                   BlocBuilder(
                       bloc: _categoryBloc,
                       builder: (_, CategoryState state) {
@@ -103,7 +103,7 @@ class _RecordDetailState extends State<RecordDetail> {
                           return CategoryWidget(record: record, data: _data, categories: [Category(title: 'UNCATEGORIZED', color: Colors.red.value)]);
                         }
                       }),
-                  DatePickerWidget(record: record, data: _data),
+                  DatePickerWidget(record: record, data: _data, isExpense: isExpense,),
                 ],
               ),
             ),
@@ -112,7 +112,7 @@ class _RecordDetailState extends State<RecordDetail> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _submit(isSwitched);
+          _submit(isExpense);
         },
         tooltip: 'Increment',
         child: Icon(Icons.check),

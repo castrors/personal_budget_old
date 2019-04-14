@@ -11,7 +11,7 @@ class CategoryRepository {
     return await database.rawQuery('SELECT * FROM Category');
   }
 
-  addCategory( Category category) async {
+  addCategory(Category category) async {
     await database.transaction((txn) async {
       int id1 = await txn.rawInsert(
           'INSERT INTO Category (title, color) VALUES("${category.title}", ${category.color})');

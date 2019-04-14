@@ -9,10 +9,12 @@ class DatePickerWidget extends StatelessWidget {
     Key key,
     @required this.record,
     @required RecordData data,
+    @required this.isExpense
   }) : _data = data, super(key: key);
 
   final Record record;
   final RecordData _data;
+  final bool isExpense;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class DatePickerWidget extends StatelessWidget {
           labelText: 'Data', hasFloatingPlaceholder: false),
       validator: (value) {
         if (value == null) {
-          return 'Por favor, selecione a data da sua receita.';
+          return isExpense? 'Por favor, selecione a data da sua despesa.' : 'Por favor, selecione a data da sua receita.';
         }
       },
       onSaved: (DateTime date) {
