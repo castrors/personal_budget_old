@@ -1,4 +1,5 @@
 # personal_budget
+[![Codemagic build status](https://api.codemagic.io/apps/5cb4ba97aef6f80f135cb5c2/5cb4ba97aef6f80f135cb5c1/status_badge.svg)](https://codemagic.io/apps/5cb4ba97aef6f80f135cb5c2/5cb4ba97aef6f80f135cb5c1/latest_build)
 
 A new Flutter project.
 
