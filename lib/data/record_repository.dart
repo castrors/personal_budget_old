@@ -6,8 +6,9 @@ class RecordRepository {
 
   RecordRepository({this.database});
 
-  Future<List<Map>> getRecords() async {
-    return await database.rawQuery('SELECT * FROM Record INNER JOIN Category on Category.id = Record.category_id');
+  Future<List<Record>> getRecords() async {
+    List<Map> recordsMap =  await database.rawQuery('SELECT * FROM Record INNER JOIN Category on Category.id = Record.category_id');
+    return recordsMap.map((item) => Record.fromJson(item)).toList();
   }
 
   addRecord(Record record) async {
