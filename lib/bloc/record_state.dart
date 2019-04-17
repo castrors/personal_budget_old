@@ -26,26 +26,10 @@ class RecordLoaded extends RecordState {
 }
 
 ///Result when record is saved with success
-class RecordSaved extends RecordState {
-  ///Record
-  final Record record;
-
-  ///Constructor
-  RecordSaved({@required this.record})
-      : assert(record != null),
-        super([record]);
-}
+class RecordSaved extends RecordState {}
 
 ///Result when record is deleted with success
-class RecordDeleted extends RecordState {
-  ///Record
-  final Record record;
-
-  ///Constructor
-  RecordDeleted({@required this.record})
-      : assert(record != null),
-        super([record]);
-}
+class RecordDeleted extends RecordState {}
 
 ///Result when an error occurs
 class RecordError extends RecordState {}

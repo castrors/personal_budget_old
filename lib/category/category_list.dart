@@ -48,10 +48,7 @@ class _CategoryListState extends State<CategoryList> {
                 color: Color(0xfff3f3f3),
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  '''
-                  Clique sobre a categoria para poder 
-                  editar ou deletar a mesma.
-                  ''',
+                  'Clique sobre a categoria para poder editar ou deletar a mesma.',
                   style: TextStyle(
                       color: Colors.grey.shade600,
                       fontStyle: FontStyle.italic,

@@ -21,16 +21,16 @@ class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
   @override
   void initState() {
     super.initState();
-    radioModels.add(RadioModel(false, Color(0xfff5a623)));
-    radioModels.add(RadioModel(false, Color(0xff3eba65)));
-    radioModels.add(RadioModel(false, Color(0xff4a90e2)));
-    radioModels.add(RadioModel(false, Color(0xffbb37d6)));
-    radioModels.add(RadioModel(false, Color(0xffb83030)));
-    radioModels.add(RadioModel(false, Color(0xffedc100)));
-    radioModels.add(RadioModel(false, Color(0xff7ed321)));
-    radioModels.add(RadioModel(false, Color(0xff4adbe2)));
-    radioModels.add(RadioModel(false, Color(0xffe24a8b)));
-    radioModels.add(RadioModel(false, Color(0xffff5a4b)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xfff5a623)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xff3eba65)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xff4a90e2)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xffbb37d6)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xffb83030)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xffedc100)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xff7ed321)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xff4adbe2)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xffe24a8b)));
+    radioModels.add(RadioModel(isSelected: false, color: Color(0xffff5a4b)));
 
     var category = widget.category;
     if (category != null) {
@@ -121,5 +121,5 @@ class RadioModel {
   final Color color;
 
   ///Constructor
-  RadioModel(isSelected, this.color);
+  RadioModel({this.isSelected, this.color});
 }

@@ -30,8 +30,8 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     if (event is AddRecord) {
       yield RecordLoading();
       try {
-        final record = await recordRepository.addRecord(event.record);
-        yield RecordSaved(record: record);
+        await recordRepository.addRecord(event.record);
+        yield RecordSaved();
       }  on Exception catch (e) {
         print(e.toString());
         yield RecordError();
@@ -40,8 +40,8 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     if (event is UpdateRecord) {
       yield RecordLoading();
       try {
-        final record = await recordRepository.updateRecord(event.record);
-        yield RecordSaved(record: record);
+        await recordRepository.updateRecord(event.record);
+        yield RecordSaved();
       }  on Exception catch (e) {
         print(e.toString());
         yield RecordError();
@@ -50,8 +50,8 @@ class RecordBloc extends Bloc<RecordEvent, RecordState> {
     if (event is DeleteRecord) {
       yield RecordLoading();
       try {
-        final record = await recordRepository.deleteRecord(event.record);
-        yield RecordDeleted(record: record);
+        await recordRepository.deleteRecord(event.record);
+        yield RecordDeleted();
       }  on Exception catch (e) {
         print(e.toString());
         yield RecordError();
