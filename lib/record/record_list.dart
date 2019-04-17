@@ -3,9 +3,9 @@ import 'package:personal_budget/bloc/blocs.dart';
 import 'package:personal_budget/main.dart';
 import 'package:personal_budget/models/record.dart';
 import 'package:personal_budget/record/record_detail.dart';
-import 'package:personal_budget/data/record_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+///RecordList widget
 class RecordList extends StatefulWidget {
   @override
   _RecordListState createState() => _RecordListState();
@@ -44,7 +44,7 @@ class _RecordListState extends State<RecordList> {
             padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
             child: BlocBuilder(
                 bloc: _recordBloc,
-                builder: (_, RecordState state) {
+                builder: (_, state) {
                   if (state is RecordLoading) {
                     return Center(child: CircularProgressIndicator());
                   }
@@ -70,7 +70,7 @@ class _RecordListState extends State<RecordList> {
       body: Center(
           child: BlocBuilder(
               bloc: _recordBloc,
-              builder: (_, RecordState state) {
+              builder: (_, state) {
                 if (state is RecordEmpty) {
                   return Center(child: Text('RecordEmpty'));
                 }
@@ -81,7 +81,7 @@ class _RecordListState extends State<RecordList> {
                   final records = state.records;
                   return ListView.builder(
                       itemCount: records.length,
-                      itemBuilder: (BuildContext context, int index) {
+                      itemBuilder: (context, index) {
                         return provideListItem(records[index]);
                       });
                 }
@@ -100,7 +100,7 @@ class _RecordListState extends State<RecordList> {
   }
 
   Text provideTotalAmount(List<Record> records) {
-    double totalAmount = records.map((record) {
+    var totalAmount = records.map((record) {
       return record.isExpense ? record.amount * -1 : record.amount;
     }).fold(0, (previous, current) => previous + current);
     return Text('R\$ $totalAmount',
@@ -109,7 +109,7 @@ class _RecordListState extends State<RecordList> {
             fontWeight: FontWeight.w300,
             color: Colors.lightGreen.shade200));
   }
-  
+
   Widget provideListItem(Record record) {
     return Dismissible(
       key: Key(record.description),
@@ -131,7 +131,7 @@ class _RecordListState extends State<RecordList> {
         subtitle: Text(record.description),
         trailing: Column(
           children: <Widget>[
-            provideAmound(record),
+            provideAmount(record),
             Text(record.date.toString()),
           ],
         ),
@@ -142,7 +142,8 @@ class _RecordListState extends State<RecordList> {
     );
   }
 
-  provideAmound(Record item) {
+  ///Provide amount text from record
+  Text provideAmount(Record item) {
     return item.isExpense
         ? Text(
             '- R\$ ${item.amount}',

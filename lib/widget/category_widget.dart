@@ -3,11 +3,16 @@ import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/record.dart';
 import 'package:personal_budget/models/record_data.dart';
 
+///Category Widget
 class CategoryWidget extends StatefulWidget {
+  ///Record
   final Record record;
+  ///Record data
   final RecordData _data;
+  ///Categories
   final List<Category> categories;
 
+  ///Constructor
   CategoryWidget({
     Key key,
     @required this.record,
@@ -39,7 +44,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
   void initState() {
     super.initState();
     if (widget.record != null) {
-      Category category = widget.record.category;
+      var category = widget.record.category;
       if (category != null) {
         changedDropDownItem(category);
       }
@@ -63,7 +68,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
 
   void changedDropDownItem(Category selectedCategory) {
     setState(() {
-      this.widget._data.category = selectedCategory;
+      widget._data.category = selectedCategory;
       _currentCategory = selectedCategory;
     });
   }

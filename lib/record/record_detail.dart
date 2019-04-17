@@ -10,8 +10,12 @@ import 'package:personal_budget/widget/category_widget.dart';
 import 'package:personal_budget/widget/date_picker_widget.dart';
 import 'package:personal_budget/widget/description_widget.dart';
 
+///Record detail widget
 class RecordDetail extends StatefulWidget {
+  ///Record related
   final Record record;
+
+  ///Constructor
   RecordDetail({Key key, this.record}) : super(key: key);
 
   @override
@@ -21,7 +25,7 @@ class RecordDetail extends StatefulWidget {
 class _RecordDetailState extends State<RecordDetail> {
   final _formKey = GlobalKey<FormState>();
   final _formKeyAmount = GlobalKey<FormState>();
-  RecordData _data = RecordData();
+  final _data = RecordData();
   bool isExpense;
   CategoryBloc _categoryBloc;
 
@@ -30,7 +34,7 @@ class _RecordDetailState extends State<RecordDetail> {
         _formKeyAmount.currentState.validate()) {
       _formKey.currentState.save();
       _formKeyAmount.currentState.save();
-      Navigator.pop(context, _data.toPersistentModel(isExpense));
+      Navigator.pop(context, _data.toPersistentModel(isExpense: isExpense));
     }
   }
 
@@ -38,7 +42,7 @@ class _RecordDetailState extends State<RecordDetail> {
   void initState() {
     super.initState();
 
-    if(widget.record != null){
+    if (widget.record != null) {
       isExpense = widget.record.isExpense;
     } else {
       isExpense = true;
@@ -47,7 +51,7 @@ class _RecordDetailState extends State<RecordDetail> {
 
   @override
   Widget build(BuildContext context) {
-    Record record = widget.record;
+    var record = widget.record;
     _categoryBloc = App.of(context).categoryBloc;
     _categoryBloc.dispatch(FetchCategory());
 
@@ -89,21 +93,36 @@ class _RecordDetailState extends State<RecordDetail> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: <Widget>[
-                  DescriptionWidget(record: record, data: _data, isExpense: isExpense),
+                  DescriptionWidget(
+                      record: record, data: _data, isExpense: isExpense),
                   BlocBuilder(
                       bloc: _categoryBloc,
-                      builder: (_, CategoryState state) {
-                        if(state is CategoryLoaded){
-                          return CategoryWidget(record: record, data: _data, categories: state.categories);
+                      builder: (_, state) {
+                        if (state is CategoryLoaded) {
+                          return CategoryWidget(
+                              record: record,
+                              data: _data,
+                              categories: state.categories);
                         }
-                        if(state is CategoryLoading){
+                        if (state is CategoryLoading) {
                           return CircularProgressIndicator();
                         }
-                        if(state is CategoryEmpty || state is CategoryError){
-                          return CategoryWidget(record: record, data: _data, categories: [Category(title: 'UNCATEGORIZED', color: Colors.red.value)]);
+                        if (state is CategoryEmpty || state is CategoryError) {
+                          return CategoryWidget(
+                              record: record,
+                              data: _data,
+                              categories: [
+                                Category(
+                                    title: 'UNCATEGORIZED',
+                                    color: Colors.red.value)
+                              ]);
                         }
                       }),
-                  DatePickerWidget(record: record, data: _data, isExpense: isExpense,),
+                  DatePickerWidget(
+                    record: record,
+                    data: _data,
+                    isExpense: isExpense,
+                  ),
                 ],
               ),
             ),

@@ -3,11 +3,16 @@ import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/category_data.dart';
 import 'package:personal_budget/widget/category_colors_widget.dart';
 
-final colorsKey = new GlobalKey<CategoryColorsWidgetState>();
+/// Colors key for selection
+final GlobalKey<CategoryColorsWidgetState> colorsKey =
+    GlobalKey<CategoryColorsWidgetState>();
 
+/// CategoryDetail
 class CategoryDetail extends StatefulWidget {
+  /// Selected category
   final Category category;
 
+  ///Constructor
   CategoryDetail({Key key, this.category}) : super(key: key);
 
   @override
@@ -16,7 +21,7 @@ class CategoryDetail extends StatefulWidget {
 
 class _CategoryDetailState extends State<CategoryDetail> {
   final _formKey = GlobalKey<FormState>();
-  CategoryData _data = CategoryData();
+  final CategoryData _data = CategoryData();
 
   void _submit() {
     if (_formKey.currentState.validate()) {
@@ -31,7 +36,7 @@ class _CategoryDetailState extends State<CategoryDetail> {
 
   @override
   Widget build(BuildContext context) {
-    Category category = widget.category;
+    var category = widget.category;
     return Scaffold(
       appBar: AppBar(
         title: Text('Nova Categoria'),
@@ -52,7 +57,10 @@ class _CategoryDetailState extends State<CategoryDetail> {
               child: Column(
                 children: <Widget>[
                   Text(
-                    'Você pode criar categorias para os tipos de Despesas e Receitas que quiser registrar.',
+                    """
+                    Você pode criar categorias para os tipos de 
+                    Despesas e Receitas que quiser registrar.
+                    """,
                     style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.w300),
@@ -65,8 +73,8 @@ class _CategoryDetailState extends State<CategoryDetail> {
                         return 'Por favor, nomeie a sua categoria.';
                       }
                     },
-                    onSaved: (String title) {
-                      this._data.title = title;
+                    onSaved: (title) {
+                      _data.title = title;
                     },
                   ),
                 ],

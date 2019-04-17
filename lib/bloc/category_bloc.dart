@@ -4,9 +4,12 @@ import 'package:personal_budget/bloc/blocs.dart';
 import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/data/category_repository.dart';
 
+/// CategoryBloc
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
+  /// CategoryRepository
   final CategoryRepository categoryRepository;
 
+  /// CategoryBloc constructor
   CategoryBloc({@required this.categoryRepository});
 
   @override
@@ -18,12 +21,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     if (event is FetchCategory) {
       yield CategoryLoading();
       try {
-        final List<Map> categoriesMap =
-            await categoryRepository.getCategories();
-        final List<Category> categories =
+        final categoriesMap = await categoryRepository.getCategories();
+        final categories =
             categoriesMap.map((item) => Category.fromJson(item)).toList();
         yield CategoryLoaded(categories: categories);
-      } catch (e) {
+      } on Exception catch (e) {
         print(e.toString());
         yield CategoryError();
       }
@@ -31,27 +33,32 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     if (event is AddCategory) {
       yield CategoryLoading();
       try {
-        final category = categoryRepository.addCategory(event.category);
+        final category = await categoryRepository.addCategory(event.category);
         yield CategorySaved(category: category);
-      } catch (e) {
+      } on Exception catch (e) {
+        print(e.toString());
         yield CategoryError();
       }
     }
     if (event is UpdateCategory) {
       yield CategoryLoading();
       try {
-        final category = categoryRepository.updateCategory(event.category);
+        final category =
+            await categoryRepository.updateCategory(event.category);
         yield CategorySaved(category: category);
-      } catch (e) {
+      } on Exception catch (e) {
+        print(e.toString());
         yield CategoryError();
       }
     }
     if (event is DeleteCategory) {
       yield CategoryLoading();
       try {
-        final category = categoryRepository.deleteCategory(event.category);
+        final category =
+            await categoryRepository.deleteCategory(event.category);
         yield CategoryDeleted(category: category);
-      } catch (e) {
+      } on Exception catch (e) {
+        print(e.toString());
         yield CategoryError();
       }
     }

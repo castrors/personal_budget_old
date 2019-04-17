@@ -1,5 +1,4 @@
 import 'package:personal_budget/bloc/blocs.dart';
-import 'package:personal_budget/models/record.dart';
 import 'package:test/test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -19,15 +18,18 @@ void main() {
       expect(recordBloc.initialState, RecordEmpty());
     });
 
-    test('emits a loading state and then an loaded state with a list that contains recordOne', () {
-      List<Record> records = [recordOne];
+    test(
+        '''emits a loading state and then an loaded state with a list that contains recordOne''',
+        () {
+      final records = [recordOne];
       final expected = [
         RecordEmpty(),
         RecordLoading(),
         RecordLoaded(records: records),
       ];
 
-      when(recordRepository.getRecords()).thenAnswer((_) => Future.value(records));
+      when(recordRepository.getRecords())
+          .thenAnswer((_) => Future.value(records));
       expectLater(recordBloc.state, emitsInOrder(expected));
       recordBloc.dispatch(FetchRecord());
     });

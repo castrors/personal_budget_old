@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:personal_budget/models/category.dart';
 
+///Category colors widget
 class CategoryColorsWidget extends StatefulWidget {
+  ///Category
   final Category category;
+
+  ///Constructor
   CategoryColorsWidget({Key key, this.category}) : super(key: key);
 
   @override
   CategoryColorsWidgetState createState() => CategoryColorsWidgetState();
 }
 
+///Cateogory colors widget state
 class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
-  List<RadioModel> radioModels = List<RadioModel>();
+  ///Radio models
+  List<RadioModel> radioModels = <RadioModel>[];
 
   @override
   void initState() {
@@ -26,18 +32,19 @@ class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
     radioModels.add(RadioModel(false, Color(0xffe24a8b)));
     radioModels.add(RadioModel(false, Color(0xffff5a4b)));
 
-    Category category = widget.category;
+    var category = widget.category;
     if (category != null) {
       setSelected(category.color);
     }
   }
 
+  ///Set the current color selected
   void setSelected(int selectedColor) {
-    radioModels.forEach((radio) {
+    for (var radio in radioModels) {
       if (radio.color.value == selectedColor) {
         radio.isSelected = true;
       }
-    });
+    }
   }
 
   @override
@@ -46,21 +53,24 @@ class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
       gridDelegate:
           SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 5),
       itemCount: radioModels.length,
-      itemBuilder: (BuildContext context, int index) {
-        return new InkWell(
+      itemBuilder: (context, index) {
+        return InkWell(
           splashColor: Colors.pinkAccent,
           onTap: () {
             setState(() {
-              radioModels.forEach((element) => element.isSelected = false);
+              for (var radio in radioModels) {
+                radio.isSelected = false;
+              }
               radioModels[index].isSelected = true;
             });
           },
-          child: new RadioItem(radioModels[index]),
+          child: RadioItem(radioModels[index]),
         );
       },
     );
   }
 
+  ///Provides the selected color
   int get getSelectedColor {
     return radioModels
         .where((radio) => radio.isSelected)
@@ -71,26 +81,29 @@ class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
   }
 }
 
+///Radio item widget
 class RadioItem extends StatelessWidget {
   final RadioModel _item;
+
+  ///Constructor
   RadioItem(this._item);
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    return Container(
       alignment: Alignment.center,
-      margin: new EdgeInsets.all(12.0),
-      child: new Row(
+      margin: EdgeInsets.all(12.0),
+      child: Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          new Container(
+          Container(
             height: 50.0,
             width: 50.0,
-            decoration: new BoxDecoration(
+            decoration: BoxDecoration(
               color: _item.color,
-              border: new Border.all(
+              border: Border.all(
                   width: _item.isSelected ? 4.0 : 0.0,
                   color: _item.isSelected ? Colors.grey : Colors.transparent),
-              borderRadius: const BorderRadius.all(const Radius.circular(36.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(36.0)),
             ),
           ),
         ],
@@ -99,9 +112,14 @@ class RadioItem extends StatelessWidget {
   }
 }
 
+///Radio model
 class RadioModel {
+  ///isSelected
   bool isSelected;
+
+  ///color
   final Color color;
 
-  RadioModel(this.isSelected, this.color);
+  ///Constructor
+  RadioModel(isSelected, this.color);
 }

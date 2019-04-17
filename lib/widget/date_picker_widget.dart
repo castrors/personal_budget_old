@@ -4,7 +4,16 @@ import 'package:intl/intl.dart';
 import 'package:personal_budget/models/record.dart';
 import 'package:personal_budget/models/record_data.dart';
 
+///Date picker widget
 class DatePickerWidget extends StatelessWidget {
+  ///Record
+  final Record record;
+  ///Record data
+  final RecordData _data;
+  ///isExpense
+  final bool isExpense;
+
+  ///Constructor
   const DatePickerWidget({
     Key key,
     @required this.record,
@@ -12,9 +21,7 @@ class DatePickerWidget extends StatelessWidget {
     @required this.isExpense
   }) : _data = data, super(key: key);
 
-  final Record record;
-  final RecordData _data;
-  final bool isExpense;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +34,11 @@ class DatePickerWidget extends StatelessWidget {
           labelText: 'Data', hasFloatingPlaceholder: false),
       validator: (value) {
         if (value == null) {
-          return isExpense? 'Por favor, selecione a data da sua despesa.' : 'Por favor, selecione a data da sua receita.';
+          return isExpense? '''Por favor, selecione a data da sua despesa.''' : 'Por favor, selecione a data da sua receita.';
         }
       },
-      onSaved: (DateTime date) {
-        this._data.date = date;
+      onSaved: (date) {
+        _data.date = date;
       },
     );
   }

@@ -7,23 +7,27 @@ import 'package:personal_budget/home.dart';
 
 import 'package:personal_budget/data/record_repository.dart';
 import 'package:personal_budget/simple_bloc_delegate.dart';
-import 'package:sqflite/sqflite.dart';
 
 void main() async {
   BlocSupervisor().delegate = SimpleBlocDelegate();
-  final Database database = await SqfliteDatabase().createDatabase();
-  final RecordBloc recordBloc =
+  final database = await SqfliteDatabase().createDatabase();
+  final recordBloc =
       RecordBloc(recordRepository: RecordRepository(database: database));
-  final CategoryBloc categoryBloc =
+  final categoryBloc =
       CategoryBloc(categoryRepository: CategoryRepository(database: database));
   runApp(
       App(recordBloc: recordBloc, categoryBloc: categoryBloc, child: Home()));
 }
 
+///Root widget
 class App extends InheritedWidget {
+  ///RecordBloc
   final RecordBloc recordBloc;
+
+  ///CategoryBloc
   final CategoryBloc categoryBloc;
 
+  ///Constructor
   App({@required this.recordBloc, @required this.categoryBloc, Widget child})
       : assert(recordBloc != null && categoryBloc != null),
         super(child: child);
@@ -31,6 +35,7 @@ class App extends InheritedWidget {
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
+  ///Provides the instance of App
   static App of(BuildContext context) =>
       context.inheritFromWidgetOfExactType(App);
 }

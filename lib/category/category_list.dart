@@ -5,6 +5,7 @@ import 'package:personal_budget/category/category_detail.dart';
 import 'package:personal_budget/main.dart';
 import 'package:personal_budget/models/category.dart';
 
+///CategoryList
 class CategoryList extends StatefulWidget {
   @override
   _CategoryListState createState() => _CategoryListState();
@@ -47,7 +48,10 @@ class _CategoryListState extends State<CategoryList> {
                 color: Color(0xfff3f3f3),
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  'Clique sobre a categoria para poder editar ou deletar a mesma.',
+                  '''
+                  Clique sobre a categoria para poder 
+                  editar ou deletar a mesma.
+                  ''',
                   style: TextStyle(
                       color: Colors.grey.shade600,
                       fontStyle: FontStyle.italic,
@@ -58,7 +62,7 @@ class _CategoryListState extends State<CategoryList> {
               flex: 3,
               child: BlocBuilder(
                 bloc: _categoryBloc,
-                builder: (_, CategoryState state) {
+                builder: (_, state) {
                   if (state is CategoryEmpty) {
                     return Center(child: Text('RecordEmpty'));
                   }
@@ -69,7 +73,7 @@ class _CategoryListState extends State<CategoryList> {
                     final categories = state.categories;
                     return ListView.builder(
                         itemCount: categories.length,
-                        itemBuilder: (BuildContext context, int index) {
+                        itemBuilder: (context, index) {
                           return provideListItem(categories[index]);
                         });
                   }
@@ -95,8 +99,8 @@ class _CategoryListState extends State<CategoryList> {
         _categoryBloc.dispatch(DeleteCategory(category: category));
         _categoryBloc.dispatch(FetchCategory());
 
-        Scaffold.of(context)
-            .showSnackBar(SnackBar(content: Text("${category.title} removida com sucesso.")));
+        Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text("${category.title} removida com sucesso.")));
       },
       child: ListTile(
         title: Text(

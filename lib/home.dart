@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:personal_budget/bloc/blocs.dart';
 import 'package:personal_budget/category/category_list.dart';
-import 'package:personal_budget/models/record.dart';
-import 'package:personal_budget/record/record_detail.dart';
 import 'package:personal_budget/record/record_list.dart';
-import 'package:personal_budget/data/record_repository.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_budget/report/report_list.dart';
 
+/// Widget that contains the bottom navigation bar behavior
 class Home extends StatefulWidget {
-
   @override
   _HomeState createState() => _HomeState();
 }
@@ -17,11 +12,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
 
-  List<Widget> _children = [
-    RecordList(),
-    CategoryList(),
-    ReportList()
-  ];
+  final _children = [RecordList(), CategoryList(), ReportList()];
 
   @override
   Widget build(BuildContext context) {

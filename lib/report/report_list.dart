@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///Report list widget
 class ReportList extends StatefulWidget {
   @override
   _ReportListState createState() => _ReportListState();
