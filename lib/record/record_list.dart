@@ -23,8 +23,8 @@ class _RecordListState extends State<RecordList> {
     );
     if (recordResult != null) {
       if (record != null) {
-        _recordBloc
-            .dispatch(UpdateRecord(record: recordResult.clone(record.id)));
+        _recordBloc.dispatch(
+            UpdateRecord(record: recordResult.clone(record.id)));
       } else {
         _recordBloc.dispatch(AddRecord(record: recordResult));
       }
@@ -117,8 +117,8 @@ class _RecordListState extends State<RecordList> {
         _recordBloc.dispatch(DeleteRecord(record: record));
         _recordBloc.dispatch(FetchRecord());
 
-        Scaffold.of(context)
-            .showSnackBar(SnackBar(content: Text("${record.id} dismissed")));
+        Scaffold.of(context).showSnackBar(
+            SnackBar(content: Text("${record.id} dismissed")));
       },
       child: ListTile(
         title: Text(

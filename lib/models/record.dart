@@ -33,7 +33,7 @@ class Record extends Equatable {
 
   ///Create a record from json
   factory Record.fromJson(Map<String, dynamic> data) => Record(
-      id: data['id'],
+      id: data['record_id'],
       amount: data['amount'],
       description: data['description'],
       category: Category(
@@ -43,7 +43,7 @@ class Record extends Equatable {
 
   ///Convert a record to json
   Map<String, dynamic> toJson() => {
-        'id': id,
+        'record_id': id,
         'amount': amount,
         'description': description,
         'category_id': category.id,

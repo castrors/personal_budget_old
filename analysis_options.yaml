@@ -21,7 +21,7 @@ linter:
   # ordering
     - directives_ordering
   # formatting
-    - lines_longer_than_80_chars # avoid
+  ##  - lines_longer_than_80_chars # avoid (Consider to return this later)
     - curly_braces_in_flow_control_structures
   # --- DOCUMENTATION
   # comments

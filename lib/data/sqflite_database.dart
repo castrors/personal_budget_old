@@ -15,18 +15,18 @@ class SqfliteDatabase {
 
   Future _create(Database db, int version) async {
     await db.execute("CREATE TABLE Category ("
-        "id INTEGER PRIMARY KEY,"
+        "category_id INTEGER PRIMARY KEY,"
         "title TEXT,"
         "color INTEGER"
         ") ");
     await db.execute("CREATE TABLE Record ("
-        "id INTEGER PRIMARY KEY,"
+        "record_id INTEGER PRIMARY KEY,"
         "amount REAL,"
         "description TEXT,"
         "category_id INTEGER NOT NULL,"
         "date INTEGER,"
         "is_expense INTEGER,"
-        "FOREIGN KEY (category_id) REFERENCES Category(id)"
+        "FOREIGN KEY (category_id) REFERENCES Category(category_id)"
         ") ");
 
     await db.rawInsert('INSERT INTO Category (title, color) VALUES(?,?)',
