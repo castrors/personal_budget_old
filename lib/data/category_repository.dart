@@ -10,8 +10,9 @@ class CategoryRepository {
   CategoryRepository({this.database});
 
   ///Provide a list of categories
-  Future<List<Map>> getCategories() async {
-    return await database.rawQuery('SELECT * FROM Category');
+  Future<List<Category>> getCategories() async {
+    var categoriesMap = await database.rawQuery('SELECT * FROM Category');
+    return categoriesMap.map((item) => Category.fromJson(item)).toList();
   }
 
   ///Add a category into the database

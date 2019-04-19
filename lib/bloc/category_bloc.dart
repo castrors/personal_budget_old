@@ -21,9 +21,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     if (event is FetchCategory) {
       yield CategoryLoading();
       try {
-        final categoriesMap = await categoryRepository.getCategories();
-        final categories =
-            categoriesMap.map((item) => Category.fromJson(item)).toList();
+        final categories = await categoryRepository.getCategories();
+            
         yield CategoryLoaded(categories: categories);
       } on Exception catch (e) {
         print(e.toString());

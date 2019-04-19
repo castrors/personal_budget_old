@@ -15,8 +15,11 @@ class RecordDetail extends StatefulWidget {
   ///Record related
   final Record record;
 
+  ///Categories
+  final List<Category> categories;
+
   ///Constructor
-  RecordDetail({Key key, this.record}) : super(key: key);
+  RecordDetail({Key key, this.record, this.categories}) : super(key: key);
 
   @override
   _RecordDetailState createState() => _RecordDetailState();
@@ -27,7 +30,6 @@ class _RecordDetailState extends State<RecordDetail> {
   final _formKeyAmount = GlobalKey<FormState>();
   final _data = RecordData();
   bool isExpense;
-  CategoryBloc _categoryBloc;
 
   void _submit(bool isExpense) {
     if (_formKey.currentState.validate() &&
@@ -52,9 +54,6 @@ class _RecordDetailState extends State<RecordDetail> {
   @override
   Widget build(BuildContext context) {
     var record = widget.record;
-    _categoryBloc = App.of(context).categoryBloc;
-    _categoryBloc.dispatch(FetchCategory());
-
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
@@ -95,29 +94,10 @@ class _RecordDetailState extends State<RecordDetail> {
                 children: <Widget>[
                   DescriptionWidget(
                       record: record, data: _data, isExpense: isExpense),
-                  BlocBuilder(
-                      bloc: _categoryBloc,
-                      builder: (_, state) {
-                        if (state is CategoryLoaded) {
-                          return CategoryWidget(
+                  CategoryWidget(
                               record: record,
                               data: _data,
-                              categories: state.categories);
-                        }
-                        if (state is CategoryLoading) {
-                          return CircularProgressIndicator();
-                        }
-                        if (state is CategoryEmpty || state is CategoryError) {
-                          return CategoryWidget(
-                              record: record,
-                              data: _data,
-                              categories: [
-                                Category(
-                                    title: 'UNCATEGORIZED',
-                                    color: Colors.red.value)
-                              ]);
-                        }
-                      }),
+                              categories: widget.categories),
                   DatePickerWidget(
                     record: record,
                     data: _data,
@@ -138,11 +118,5 @@ class _RecordDetailState extends State<RecordDetail> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
-  }
-
-  @override
-  void dispose() {
-    _categoryBloc.dispose();
-    super.dispose();
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:personal_budget/bloc/blocs.dart';
+import 'package:personal_budget/data/category_repository.dart';
 import 'package:personal_budget/main.dart';
+import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/record.dart';
 import 'package:personal_budget/record/record_detail.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,18 +15,21 @@ class RecordList extends StatefulWidget {
 
 class _RecordListState extends State<RecordList> {
   RecordBloc _recordBloc;
+  CategoryBloc _categoryBloc;
+  List<Category> categories;
 
   void _navigateToRecordDetail(Record record) async {
     final recordResult = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => RecordDetail(record: record),
+        builder: (context) =>
+            RecordDetail(record: record, categories: categories),
       ),
     );
     if (recordResult != null) {
       if (record != null) {
-        _recordBloc.dispatch(
-            UpdateRecord(record: recordResult.clone(record.id)));
+        _recordBloc
+            .dispatch(UpdateRecord(record: recordResult.clone(record.id)));
       } else {
         _recordBloc.dispatch(AddRecord(record: recordResult));
       }
@@ -36,6 +41,12 @@ class _RecordListState extends State<RecordList> {
   Widget build(BuildContext context) {
     _recordBloc = App.of(context).recordBloc;
     _recordBloc.dispatch(FetchRecord());
+    _categoryBloc = App.of(context).categoryBloc;
+
+    _categoryBloc.categoryRepository
+        .getCategories()
+        .then((categoriesResult) => categories = categoriesResult)
+        .catchError((categoriesResult) => categories = []);
 
     return Scaffold(
       appBar: AppBar(
@@ -68,27 +79,28 @@ class _RecordListState extends State<RecordList> {
         ),
       ),
       body: Center(
-          child: BlocBuilder(
-              bloc: _recordBloc,
-              builder: (_, state) {
-                if (state is RecordEmpty) {
-                  return Center(child: Text('RecordEmpty'));
-                }
-                if (state is RecordLoading) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                if (state is RecordLoaded) {
-                  final records = state.records;
-                  return ListView.builder(
-                      itemCount: records.length,
-                      itemBuilder: (context, index) {
-                        return provideListItem(records[index]);
-                      });
-                }
-                if (state is RecordError) {
-                  return Center(child: Text('RecordError'));
-                }
-              })),
+        child: BlocBuilder(
+            bloc: _recordBloc,
+            builder: (_, state) {
+              if (state is RecordEmpty) {
+                return Center(child: Text('RecordEmpty'));
+              }
+              if (state is RecordLoading) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (state is RecordLoaded) {
+                final records = state.records;
+                return ListView.builder(
+                    itemCount: records.length,
+                    itemBuilder: (context, index) {
+                      return provideListItem(records[index]);
+                    });
+              }
+              if (state is RecordError) {
+                return Center(child: Text('RecordError'));
+              }
+            }),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _navigateToRecordDetail(null);
@@ -117,8 +129,8 @@ class _RecordListState extends State<RecordList> {
         _recordBloc.dispatch(DeleteRecord(record: record));
         _recordBloc.dispatch(FetchRecord());
 
-        Scaffold.of(context).showSnackBar(
-            SnackBar(content: Text("${record.id} dismissed")));
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text("${record.id} dismissed")));
       },
       child: ListTile(
         title: Text(
