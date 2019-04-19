@@ -8,7 +8,7 @@ class AmountWidget extends StatelessWidget {
   final Record record;
 
   ///Switch state flag
-  final bool isSwitched;
+  final bool isExpense;
 
   ///Record data
   final RecordData _data;
@@ -17,7 +17,7 @@ class AmountWidget extends StatelessWidget {
   const AmountWidget({
     Key key,
     @required this.record,
-    @required this.isSwitched,
+    @required this.isExpense,
     @required RecordData data,
   })  : _data = data,
         super(key: key);
@@ -29,7 +29,7 @@ class AmountWidget extends StatelessWidget {
       style: TextStyle(color: Colors.white, fontSize: 40),
       initialValue: record != null ? record.amount.toString() : "",
       decoration: InputDecoration(
-          labelText: isSwitched ? 'Valor da Despesa' : 'Valor da Receita',
+          labelText: isExpense ? 'Valor da Despesa' : 'Valor da Receita',
           prefixText: 'R\$ ',
           prefixStyle: TextStyle(color: Colors.white, fontSize: 30),
           hintStyle: TextStyle(color: Colors.white, fontSize: 20),

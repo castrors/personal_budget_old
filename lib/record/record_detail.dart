@@ -79,7 +79,7 @@ class _RecordDetailState extends State<RecordDetail> {
             child: Form(
               key: _formKeyAmount,
               child: AmountWidget(
-                  record: record, isSwitched: isExpense, data: _data),
+                  record: record, isExpense: isExpense, data: _data),
             ),
           ),
           preferredSize: Size(0.0, 100.0),
