@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:personal_budget/bloc/blocs.dart';
-import 'package:personal_budget/main.dart';
 import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/record.dart';
 import 'package:personal_budget/models/record_data.dart';
@@ -32,8 +29,10 @@ class _RecordDetailState extends State<RecordDetail> {
   bool isExpense;
 
   void _submit(bool isExpense) {
-    if (_formKey.currentState.validate() &&
-        _formKeyAmount.currentState.validate()) {
+    var formBody= _formKey.currentState.validate();
+    var formHeader = _formKeyAmount.currentState.validate();
+
+    if (formBody && formHeader && _data.category!=null) {
       _formKey.currentState.save();
       _formKeyAmount.currentState.save();
       Navigator.pop(context, _data.toPersistentModel(isExpense: isExpense));
@@ -81,7 +80,7 @@ class _RecordDetailState extends State<RecordDetail> {
                   record: record, isExpense: isExpense, data: _data),
             ),
           ),
-          preferredSize: Size(0.0, 100.0),
+          preferredSize: Size(0.0, 128.0),
         ),
       ),
       body: Form(

@@ -34,13 +34,14 @@ class AmountWidget extends StatelessWidget {
           prefixStyle: TextStyle(color: Colors.white, fontSize: 30),
           hintStyle: TextStyle(color: Colors.white, fontSize: 20),
           labelStyle: TextStyle(color: Colors.white, fontSize: 20),
+          errorStyle: TextStyle(color: Colors.white),
           enabledBorder:
               UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
           focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: Colors.white))),
       validator: (value) {
         if (value.isEmpty) {
-          return 'Por favor, adicione a quantidade da sua receita.';
+          return 'Por favor, adicione a quantidade da sua ${isExpense? 'despesa' : 'receita'}.';
         }
       },
       onSaved: (amount) {

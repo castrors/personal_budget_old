@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:personal_budget/bloc/blocs.dart';
 import 'package:personal_budget/data/category_repository.dart';
 import 'package:personal_budget/main.dart';
@@ -68,7 +69,7 @@ class _RecordListState extends State<RecordList> {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white)),
                         provideTotalAmount(state.records),
-                        Text('Março 2019',
+                        Text(provideLastMonthAndYear(state.records),
                             style: TextStyle(color: Colors.white)),
                       ],
                     );
@@ -122,6 +123,17 @@ class _RecordListState extends State<RecordList> {
             color: Colors.lightGreen.shade200));
   }
 
+  String provideLastMonthAndYear(List<Record> records) {
+    var newestDate = DateTime(1900);
+    final formatter = DateFormat('MMMM yyyy');
+    for (var record in records) {
+      if (record.date.compareTo(newestDate) > 0) {
+        newestDate = record.date;
+      }
+    }
+    return formatter.format(newestDate);
+  }
+
   Widget provideListItem(Record record) {
     return Dismissible(
       key: Key(record.description),
@@ -144,7 +156,7 @@ class _RecordListState extends State<RecordList> {
         trailing: Column(
           children: <Widget>[
             provideAmount(record),
-            Text(record.date.toString()),
+            provideFormattedDate(record),
           ],
         ),
         onTap: () {
@@ -165,5 +177,10 @@ class _RecordListState extends State<RecordList> {
             'R\$ ${item.amount}',
             style: TextStyle(color: Colors.green),
           );
+  }
+
+  Text provideFormattedDate(Record record){
+    final formatter = DateFormat('dd/MM/yyyy');
+    return Text(formatter.format(record.date));
   }
 }
