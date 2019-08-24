@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:personal_budget/bloc/blocs.dart';
-import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/data/category_repository.dart';
 
 /// CategoryBloc

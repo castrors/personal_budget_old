@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_budget/helper/category_colors_helper.dart';
 import 'package:personal_budget/models/category.dart';
 
 ///Category colors widget
@@ -34,16 +35,7 @@ class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
 
     var category = widget.category;
     if (category != null) {
-      setSelected(category.color);
-    }
-  }
-
-  ///Set the current color selected
-  void setSelected(int selectedColor) {
-    for (var radio in radioModels) {
-      if (radio.color.value == selectedColor) {
-        radio.isSelected = true;
-      }
+      CategoryColorsHelper.setSelected(category.color, radioModels);
     }
   }
 
@@ -72,12 +64,7 @@ class CategoryColorsWidgetState extends State<CategoryColorsWidget> {
 
   ///Provides the selected color
   int get getSelectedColor {
-    return radioModels
-        .where((radio) => radio.isSelected)
-        .toList()
-        .first
-        .color
-        .value;
+    return CategoryColorsHelper.getSelectedColor(radioModels);
   }
 }
 
