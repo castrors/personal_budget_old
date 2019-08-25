@@ -2,9 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:personal_budget/category/category_detail.dart';
-import 'package:personal_budget/main.dart';
 import 'package:personal_budget/models/category.dart';
-import 'package:personal_budget/models/category_data_provider.dart';
+import 'package:personal_budget/models/category_data.dart';
 import 'package:provider/provider.dart';
 
 ///CategoryList
@@ -20,10 +19,10 @@ class CategoryList extends StatelessWidget {
 
     if (categoryResult != null) {
       if (categoryResult.id != null) {
-        Provider.of<CategoryDataProvider>(context)
+        Provider.of<CategoryData>(context)
             .updateCategory(categoryResult);
       } else {
-        Provider.of<CategoryDataProvider>(context).addCategory(categoryResult);
+        Provider.of<CategoryData>(context).addCategory(categoryResult);
       }
     }
   }
@@ -53,7 +52,7 @@ class CategoryList extends StatelessWidget {
               )),
           Flexible(
               flex: 3,
-              child: Consumer<CategoryDataProvider>(
+              child: Consumer<CategoryData>(
                   builder: (context, categoryData, child) {
                 return FutureBuilder<UnmodifiableListView<Category>>(
                   future: categoryData.categories,
@@ -83,7 +82,7 @@ class CategoryList extends StatelessWidget {
   Widget provideListItem(BuildContext context, Category category) {
     return Dismissible(
       onDismissed: (direction) {
-        Provider.of<CategoryDataProvider>(context).deleteCategory(category);
+        Provider.of<CategoryData>(context).deleteCategory(category);
 
         Scaffold.of(context).showSnackBar(
             SnackBar(content: Text("${category.title} removida com sucesso.")));

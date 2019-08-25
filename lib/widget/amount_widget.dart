@@ -1,35 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:personal_budget/models/record.dart';
-import 'package:personal_budget/models/record_data.dart';
 
-/// AmountWidget
 class AmountWidget extends StatelessWidget {
-  ///Record
   final Record record;
+  final Function onSaveCallback;
 
-  ///Switch state flag
-  final bool isExpense;
-
-  ///Record data
-  final RecordData _data;
-
-  ///Constructor
-  const AmountWidget({
-    Key key,
+  AmountWidget({
     @required this.record,
-    @required this.isExpense,
-    @required RecordData data,
-  })  : _data = data,
-        super(key: key);
+    @required this.onSaveCallback,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       keyboardType: TextInputType.number,
       style: TextStyle(color: Colors.white, fontSize: 40),
-      initialValue: record != null ? record.amount.toString() : "",
+      initialValue: record.amount != null ? record.amount.toString() : "",
       decoration: InputDecoration(
-          labelText: isExpense ? 'Valor da Despesa' : 'Valor da Receita',
+          labelText: record.isExpense ? 'Valor da Despesa' : 'Valor da Receita',
           prefixText: 'R\$ ',
           prefixStyle: TextStyle(color: Colors.white, fontSize: 30),
           hintStyle: TextStyle(color: Colors.white, fontSize: 20),
@@ -41,12 +29,10 @@ class AmountWidget extends StatelessWidget {
               borderSide: BorderSide(color: Colors.white))),
       validator: (value) {
         if (value.isEmpty) {
-          return 'Por favor, adicione a quantidade da sua ${isExpense? 'despesa' : 'receita'}.';
+          return 'Por favor, adicione a quantidade da sua ${record.isExpense ? 'despesa' : 'receita'}.';
         }
       },
-      onSaved: (amount) {
-        _data.amount = double.parse(amount);
-      },
+      onSaved: onSaveCallback,
     );
   }
 }

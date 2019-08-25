@@ -2,9 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:personal_budget/models/category.dart';
-import 'package:personal_budget/models/category_data_provider.dart';
+import 'package:personal_budget/models/category_data.dart';
 import 'package:personal_budget/models/record.dart';
-import 'package:personal_budget/models/record_data.dart';
 import 'package:provider/provider.dart';
 
 ///Category Widget
@@ -13,13 +12,13 @@ class CategoryWidget extends StatefulWidget {
   final Record record;
 
   ///Record data
-  final RecordData _data;
+  final Record _data;
 
   ///Constructor
   CategoryWidget({
     Key key,
     @required this.record,
-    @required RecordData data,
+    @required Record data,
   })  : _data = data,
         super(key: key);
 
@@ -62,7 +61,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
       ),
       child: DropdownButtonHideUnderline(
         child: FutureBuilder<UnmodifiableListView>(
-          future: Provider.of<CategoryDataProvider>(context).categories,
+          future: Provider.of<CategoryData>(context).categories,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return DropdownButton<Category>(

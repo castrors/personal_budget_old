@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_budget/models/record.dart';
-import 'package:personal_budget/models/record_data_provider.dart';
+import 'package:personal_budget/models/record_data.dart';
 import 'package:personal_budget/record/record_detail.dart';
 import 'package:provider/provider.dart';
 
@@ -19,11 +19,11 @@ class RecordList extends StatelessWidget {
       ),
     );
     if (recordResult != null) {
-      if (record != null) {
-        Provider.of<RecordDataProvider>(context)
+      if (record.id != null) {
+        Provider.of<RecordData>(context)
             .updateRecord(recordResult);
       } else {
-        Provider.of<RecordDataProvider>(context)
+        Provider.of<RecordData>(context)
             .addRecord(recordResult);
       }
     }
@@ -52,7 +52,7 @@ class RecordList extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Consumer<RecordDataProvider>(
+        child: Consumer<RecordData>(
                   builder: (context, recordData, child) {
                 return FutureBuilder<UnmodifiableListView<Record>>(
                   future: recordData.categories,
@@ -72,7 +72,7 @@ class RecordList extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _navigateToRecordDetail(context, null);
+          _navigateToRecordDetail(context, Record());
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),

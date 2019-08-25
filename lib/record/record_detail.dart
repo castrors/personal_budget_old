@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:personal_budget/models/record.dart';
-import 'package:personal_budget/models/record_data.dart';
 import 'package:personal_budget/widget/amount_widget.dart';
 import 'package:personal_budget/widget/category_widget.dart';
 import 'package:personal_budget/widget/date_picker_widget.dart';
 import 'package:personal_budget/widget/description_widget.dart';
 
-///Record detail widget
 class RecordDetail extends StatefulWidget {
-  ///Record related
   final Record record;
 
-  ///Constructor
   RecordDetail({Key key, this.record}) : super(key: key);
 
   @override
@@ -21,42 +17,37 @@ class RecordDetail extends StatefulWidget {
 class _RecordDetailState extends State<RecordDetail> {
   final _formKey = GlobalKey<FormState>();
   final _formKeyAmount = GlobalKey<FormState>();
-  final _data = RecordData();
-  bool isExpense;
+
+  Record _record;
 
   void _submit(bool isExpense) {
-    var formBody= _formKey.currentState.validate();
+    var formBody = _formKey.currentState.validate();
     var formHeader = _formKeyAmount.currentState.validate();
 
-    if (formBody && formHeader && _data.category!=null) {
+    if (formBody && formHeader && _record.category != null) {
       _formKey.currentState.save();
       _formKeyAmount.currentState.save();
-      Navigator.pop(context, _data.toPersistentModel(isExpense: isExpense));
+      _record.isExpense = isExpense;
+      Navigator.pop(context, _record);
     }
   }
 
   @override
   void initState() {
     super.initState();
-
-    if (widget.record != null) {
-      isExpense = widget.record.isExpense;
-    } else {
-      isExpense = true;
-    }
+    _record = widget.record;
   }
 
   @override
   Widget build(BuildContext context) {
-    var record = widget.record;
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
           Switch(
-            value: isExpense,
+            value: _record.isExpense,
             onChanged: (value) {
               setState(() {
-                isExpense = value;
+                _record.isExpense = value;
               });
             },
             activeTrackColor: Colors.lightGreenAccent,
@@ -66,14 +57,17 @@ class _RecordDetailState extends State<RecordDetail> {
           ),
         ],
         backgroundColor:
-            isExpense ? Colors.redAccent : Colors.lightGreen.shade500,
+            _record.isExpense ? Colors.redAccent : Colors.lightGreen.shade500,
         bottom: PreferredSize(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(80.0, 0.0, 16.0, 36.0),
             child: Form(
               key: _formKeyAmount,
               child: AmountWidget(
-                  record: record, isExpense: isExpense, data: _data),
+                  record: _record,
+                  onSaveCallback: (amount) {
+                    _record.amount = double.parse(amount);
+                  }),
             ),
           ),
           preferredSize: Size(0.0, 128.0),
@@ -88,14 +82,17 @@ class _RecordDetailState extends State<RecordDetail> {
               child: Column(
                 children: <Widget>[
                   DescriptionWidget(
-                      record: record, data: _data, isExpense: isExpense),
-                  CategoryWidget(
-                              record: record,
-                              data: _data),
+                    record: _record,
+                    onSaveCallback: (description) {
+                      _record.description = description;
+                    },
+                  ),
+                  CategoryWidget(record: _record, data: _record),
                   DatePickerWidget(
-                    record: record,
-                    data: _data,
-                    isExpense: isExpense,
+                    record: _record,
+                    onSaveCallback: (date) {
+                      _record.date = date;
+                    },
                   ),
                 ],
               ),
@@ -105,7 +102,7 @@ class _RecordDetailState extends State<RecordDetail> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _submit(isExpense);
+          _submit(_record.isExpense);
         },
         tooltip: 'Increment',
         child: Icon(Icons.check),

@@ -1,24 +1,35 @@
-import 'package:personal_budget/models/category.dart';
+import 'dart:collection';
+
+import 'package:flutter/material.dart';
+import 'package:personal_budget/data/record_repository.dart';
 import 'package:personal_budget/models/record.dart';
 
-///Record data
-class RecordData {
-  ///record amount
-  double amount;
-  ///record description
-  String description;
-  ///category related
-  Category category;
-  ///record date
-  DateTime date;
+class RecordData extends ChangeNotifier {
+
+  final RecordRepository _repository;
   
-  ///Convert to a persistent model
-  Record toPersistentModel({bool isExpense}) {
-    return Record(
-        amount: amount,
-        description: description,
-        category: category,
-        date: date,
-        isExpense: isExpense);
+  RecordData(this._repository);
+
+  Future<UnmodifiableListView<Record>> get categories async {
+    var records = await _repository.getRecords();
+    return UnmodifiableListView(records);
+  }
+
+
+  void updateRecord(Record record){
+    _repository.updateRecord(record);
+    notifyListeners();
+  }
+
+
+  void addRecord(Record record){
+    _repository.addRecord(record);
+    notifyListeners();
+  }
+
+
+  void deleteRecord(Record record) {
+    _repository.deleteRecord(record);
+    notifyListeners();
   }
 }
