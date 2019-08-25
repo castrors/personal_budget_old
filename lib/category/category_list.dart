@@ -75,7 +75,7 @@ class CategoryList extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            _navigateToCategoryDetail(context, null);
+            _navigateToCategoryDetail(context, Category());
           }),
     );
   }

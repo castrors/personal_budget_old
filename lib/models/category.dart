@@ -1,30 +1,23 @@
 import 'package:equatable/equatable.dart';
 
-///Category model
 class Category extends Equatable {
-  ///category id
-  final int id;
+  int id;
 
-  ///category title
-  final String title;
+  String title;
 
-  ///category color
-  final int color;
+  int color;
 
-  ///Constructor
   Category({this.id, this.title, this.color}) : super([id, title, color]);
 
-  ///Create a category from json
   factory Category.fromJson(Map<String, dynamic> data) => Category(
       id: data["category_id"], title: data["title"], color: data["color"]);
 
-  ///Converts a category to json
   Map<String, dynamic> toJson() => {
         "category_id": id,
         "title": title,
         "color": color,
       };
 
-  ///Copy a category replacing the id
-  Category clone(int id) => Category(id: id, title: title, color: color);
+  Category clone(int id, String title, int color) =>
+      Category(id: id, title: title, color: color);
 }
