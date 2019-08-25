@@ -8,8 +8,8 @@ void main() {
   testWidgets(
       'given record detail widget when record.isExpense is true then should show expense form',
       (tester) async {
-    final widget = provideMaterialApp(RecordDetail(
-        record: Record(isExpense: true), categories: provideCategories()));
+    final widget =
+        provideMaterialApp(RecordDetail(record: Record(isExpense: true)));
     await tester.pumpWidget(widget);
 
     final amountFinder = find.text('Valor da Despesa');
@@ -24,8 +24,8 @@ void main() {
   testWidgets(
       'given record detail widget when record.isExpense is false then should show receipt form',
       (tester) async {
-    final widget = provideMaterialApp(RecordDetail(
-        record: Record(isExpense: false), categories: provideCategories()));
+    final widget =
+        provideMaterialApp(RecordDetail(record: Record(isExpense: false)));
     await tester.pumpWidget(widget);
 
     final amountFinder = find.text('Valor da Receita');
@@ -40,8 +40,8 @@ void main() {
   testWidgets(
       'given record detail widget when record.isExpense is false then should show receipt form',
       (tester) async {
-    final widget = provideMaterialApp(RecordDetail(
-        record: Record(isExpense: false), categories: provideCategories()));
+    final widget =
+        provideMaterialApp(RecordDetail(record: Record(isExpense: false)));
     await tester.pumpWidget(widget);
 
     final amountFinder = find.text('Valor da Receita');
@@ -57,13 +57,13 @@ void main() {
       'given record detail widget when record is valid then should show receipt form filled',
       (tester) async {
     final widget = provideMaterialApp(RecordDetail(
-        record: Record(
-            amount: 20.0,
-            description: 'Desert',
-            category: provideCategories().first,
-            date: DateTime(2019, 4, 20),
-            isExpense: true),
-        categories: provideCategories()));
+      record: Record(
+          amount: 20.0,
+          description: 'Desert',
+          category: provideCategories().first,
+          date: DateTime(2019, 4, 20),
+          isExpense: true),
+    ));
     await tester.pumpWidget(widget);
 
     final amountFinder = find.text('20.0');
@@ -80,15 +80,16 @@ void main() {
   testWidgets(
       'given record detail widget with record null when press save button then should show validation error',
       (tester) async {
-    final widget = provideMaterialApp(RecordDetail(
-        record: null, categories: provideCategories()));
+    final widget = provideMaterialApp(RecordDetail(record: null));
     await tester.pumpWidget(widget);
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pump();
 
-    final amountFinder = find.text('Por favor, adicione a quantidade da sua despesa.');
-    final descriptionFinder = find.text('Por favor, crie uma descrição da sua despesa.');
+    final amountFinder =
+        find.text('Por favor, adicione a quantidade da sua despesa.');
+    final descriptionFinder =
+        find.text('Por favor, crie uma descrição da sua despesa.');
     final dateFinder = find.text('Por favor, selecione a data da sua despesa.');
 
     expect(amountFinder, findsOneWidget);
