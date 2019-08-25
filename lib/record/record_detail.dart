@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/record.dart';
 import 'package:personal_budget/models/record_data.dart';
 import 'package:personal_budget/widget/amount_widget.dart';
@@ -12,11 +11,8 @@ class RecordDetail extends StatefulWidget {
   ///Record related
   final Record record;
 
-  ///Categories
-  final List<Category> categories;
-
   ///Constructor
-  RecordDetail({Key key, this.record, this.categories}) : super(key: key);
+  RecordDetail({Key key, this.record}) : super(key: key);
 
   @override
   _RecordDetailState createState() => _RecordDetailState();
@@ -95,8 +91,7 @@ class _RecordDetailState extends State<RecordDetail> {
                       record: record, data: _data, isExpense: isExpense),
                   CategoryWidget(
                               record: record,
-                              data: _data,
-                              categories: widget.categories),
+                              data: _data),
                   DatePickerWidget(
                     record: record,
                     data: _data,

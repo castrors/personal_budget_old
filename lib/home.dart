@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
       title: 'Personal Budget',
       theme: ThemeData(primarySwatch: Colors.pink, primaryColor: Colors.teal),
       home: Scaffold(
-        body: [ReportList(), CategoryList(), ReportList()][_currentIndex],
+        body: [RecordList(), CategoryList(), ReportList()][_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(

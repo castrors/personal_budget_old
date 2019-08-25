@@ -7,7 +7,7 @@ class RecordRepository {
   Database database;
 
   ///Constructor
-  RecordRepository({this.database});
+  RecordRepository(this.database);
 
   ///Provides a list of records
   Future<List<Record>> getRecords() async {

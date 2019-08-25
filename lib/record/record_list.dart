@@ -1,107 +1,78 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:personal_budget/main.dart';
-import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/record.dart';
+import 'package:personal_budget/models/record_data_provider.dart';
 import 'package:personal_budget/record/record_detail.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 ///RecordList widget
-class RecordList extends StatefulWidget {
-  @override
-  _RecordListState createState() => _RecordListState();
-}
+class RecordList extends StatelessWidget {
 
-class _RecordListState extends State<RecordList> {
-  
-  List<Category> categories;
-
-  void _navigateToRecordDetail(Record record) async {
+  void _navigateToRecordDetail(BuildContext context, Record record) async {
     final recordResult = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
-            RecordDetail(record: record, categories: categories),
+            RecordDetail(record: record),
       ),
     );
     if (recordResult != null) {
       if (record != null) {
-        _recordBloc
-            .dispatch(UpdateRecord(record: recordResult.clone(record.id)));
+        Provider.of<RecordDataProvider>(context)
+            .updateRecord(recordResult);
       } else {
-        _recordBloc.dispatch(AddRecord(record: recordResult));
+        Provider.of<RecordDataProvider>(context)
+            .addRecord(recordResult);
       }
-      _recordBloc.dispatch(FetchRecord());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _recordBloc = App.of(context).recordBloc;
-    _recordBloc.dispatch(FetchRecord());
-    _categoryBloc = App.of(context).categoryBloc;
-
-    _categoryBloc.categoryRepository
-        .getCategories()
-        .then((categoriesResult) => categories = categoriesResult)
-        .catchError((categoriesResult) => categories = []);
-
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
-            child: BlocBuilder(
-                bloc: _recordBloc,
-                builder: (_, state) {
-                  if (state is RecordLoading) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  if (state is RecordLoaded) {
-                    return Column(
-                      children: <Widget>[
-                        Text('SALDO ATUAL',
-                            style: TextStyle(
-                                fontSize: 8,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                        provideTotalAmount(state.records),
-                        Text(provideLastMonthAndYear(state.records),
-                            style: TextStyle(color: Colors.white)),
-                      ],
-                    );
-                  }
-                }),
-          ),
+              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 16.0),
+              child: Column(
+                children: <Widget>[
+                  Text('SALDO ATUAL',
+                      style: TextStyle(
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                  provideTotalAmount([]),
+                  Text(provideLastMonthAndYear([]),
+                      style: TextStyle(color: Colors.white)),
+                ],
+              )),
           preferredSize: Size(0.0, 80.0),
         ),
       ),
       body: Center(
-        child: BlocBuilder(
-            bloc: _recordBloc,
-            builder: (_, state) {
-              if (state is RecordEmpty) {
-                return Center(child: Text('RecordEmpty'));
-              }
-              if (state is RecordLoading) {
-                return Center(child: CircularProgressIndicator());
-              }
-              if (state is RecordLoaded) {
-                final records = state.records;
-                return ListView.builder(
-                    itemCount: records.length,
-                    itemBuilder: (context, index) {
-                      return provideListItem(records[index]);
-                    });
-              }
-              if (state is RecordError) {
-                return Center(child: Text('RecordError'));
-              }
-            }),
+        child: Consumer<RecordDataProvider>(
+                  builder: (context, recordData, child) {
+                return FutureBuilder<UnmodifiableListView<Record>>(
+                  future: recordData.categories,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            return provideListItem(
+                                context, snapshot.data[index]);
+                          });
+                    }
+                    return CircularProgressIndicator();
+                  },
+                );
+              })
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _navigateToRecordDetail(null);
+          _navigateToRecordDetail(context, null);
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
@@ -131,12 +102,12 @@ class _RecordListState extends State<RecordList> {
     return formatter.format(newestDate);
   }
 
-  Widget provideListItem(Record record) {
+  Widget provideListItem(BuildContext context, Record record) {
     return Dismissible(
       key: Key(record.description),
       onDismissed: (direction) {
-        _recordBloc.dispatch(DeleteRecord(record: record));
-        _recordBloc.dispatch(FetchRecord());
+        // _recordBloc.dispatch(DeleteRecord(record: record));
+        // _recordBloc.dispatch(FetchRecord());
 
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text("${record.id} dismissed")));
@@ -157,7 +128,7 @@ class _RecordListState extends State<RecordList> {
           ],
         ),
         onTap: () {
-          _navigateToRecordDetail(record);
+          _navigateToRecordDetail(context, record);
         },
       ),
     );
@@ -176,7 +147,7 @@ class _RecordListState extends State<RecordList> {
           );
   }
 
-  Text provideFormattedDate(Record record){
+  Text provideFormattedDate(Record record) {
     final formatter = DateFormat('dd/MM/yyyy');
     return Text(formatter.format(record.date));
   }

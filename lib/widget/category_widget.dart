@@ -1,23 +1,25 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:personal_budget/models/category.dart';
+import 'package:personal_budget/models/category_data_provider.dart';
 import 'package:personal_budget/models/record.dart';
 import 'package:personal_budget/models/record_data.dart';
+import 'package:provider/provider.dart';
 
 ///Category Widget
 class CategoryWidget extends StatefulWidget {
   ///Record
   final Record record;
+
   ///Record data
   final RecordData _data;
-  ///Categories
-  final List<Category> categories;
 
   ///Constructor
   CategoryWidget({
     Key key,
     @required this.record,
     @required RecordData data,
-    @required this.categories,
   })  : _data = data,
         super(key: key);
 
@@ -29,7 +31,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
   Category _currentCategory;
 
   List<DropdownMenuItem<Category>> getDropDownMenuItems(
-      List<Category> categories) {
+      UnmodifiableListView<Category> categories) {
     return categories
         .map((category) => DropdownMenuItem(
             value: category,
@@ -54,16 +56,25 @@ class _CategoryWidgetState extends State<CategoryWidget> {
   @override
   Widget build(BuildContext context) {
     return InputDecorator(
-        decoration: InputDecoration(
-          icon: const Icon(Icons.category),
-          labelText: 'Categoria',
+      decoration: InputDecoration(
+        icon: const Icon(Icons.category),
+        labelText: 'Categoria',
+      ),
+      child: DropdownButtonHideUnderline(
+        child: FutureBuilder<UnmodifiableListView>(
+          future: Provider.of<CategoryDataProvider>(context).categories,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return DropdownButton<Category>(
+                value: _currentCategory,
+                items: getDropDownMenuItems(snapshot.data),
+                onChanged: changedDropDownItem,
+              );
+            }
+          },
         ),
-        child: DropdownButtonHideUnderline(
-            child: DropdownButton<Category>(
-          value: _currentCategory,
-          items: getDropDownMenuItems(widget.categories),
-          onChanged: changedDropDownItem,
-        )));
+      ),
+    );
   }
 
   void changedDropDownItem(Category selectedCategory) {

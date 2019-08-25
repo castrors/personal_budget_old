@@ -1,8 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:personal_budget/bloc/blocs.dart';
 import 'package:personal_budget/category/category_detail.dart';
 import 'package:personal_budget/main.dart';
 import 'package:personal_budget/models/category.dart';
@@ -10,15 +8,9 @@ import 'package:personal_budget/models/category_data_provider.dart';
 import 'package:provider/provider.dart';
 
 ///CategoryList
-class CategoryList extends StatefulWidget {
-  @override
-  _CategoryListState createState() => _CategoryListState();
-}
-
-class _CategoryListState extends State<CategoryList> {
-  // CategoryBloc _categoryBloc;
-
-  void _navigateToCategoryDetail(Category category) async {
+class CategoryList extends StatelessWidget {
+  void _navigateToCategoryDetail(
+      BuildContext context, Category category) async {
     final categoryResult = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -70,7 +62,8 @@ class _CategoryListState extends State<CategoryList> {
                       return ListView.builder(
                           itemCount: snapshot.data.length,
                           itemBuilder: (context, index) {
-                            return provideListItem(snapshot.data[index]);
+                            return provideListItem(
+                                context, snapshot.data[index]);
                           });
                     }
                     return CircularProgressIndicator();
@@ -82,12 +75,12 @@ class _CategoryListState extends State<CategoryList> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            _navigateToCategoryDetail(null);
+            _navigateToCategoryDetail(context, null);
           }),
     );
   }
 
-  Widget provideListItem(Category category) {
+  Widget provideListItem(BuildContext context, Category category) {
     return Dismissible(
       onDismissed: (direction) {
         Provider.of<CategoryDataProvider>(context).deleteCategory(category);
@@ -105,7 +98,7 @@ class _CategoryListState extends State<CategoryList> {
               fontWeight: FontWeight.bold),
         ),
         onTap: () {
-          _navigateToCategoryDetail(category);
+          _navigateToCategoryDetail(context, category);
         },
       ),
     );
