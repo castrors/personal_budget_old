@@ -73,7 +73,7 @@ linter:
   # classes
     - one_member_abstracts # avoid
     - avoid_classes_with_only_static_members # avoid
-    - public_member_api_docs
+  #  - public_member_api_docs
   # constructors
     - prefer_constructors_over_static_methods
   # members

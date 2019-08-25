@@ -19,7 +19,10 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(
-            builder: (_) => RecordDataProvider(RecordRepositoryImpl(database)))
+          builder: (_) => RecordDataProvider(
+            RecordRepositoryImpl(database),
+          ),
+        )
       ],
       child: Home(),
     ),

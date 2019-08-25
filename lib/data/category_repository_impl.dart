@@ -2,21 +2,16 @@ import 'package:personal_budget/data/category_repository.dart';
 import 'package:personal_budget/models/category.dart';
 import 'package:sqflite/sqflite.dart';
 
-///CategoryRepository
 class CategoryRepositoryImpl implements CategoryRepository {
-  ///Database instance
   Database database;
 
-  ///Constructor
   CategoryRepositoryImpl(this.database);
 
-  ///Provide a list of categories
   Future<List<Category>> getCategories() async {
     var categoriesMap = await database.rawQuery('SELECT * FROM Category');
     return categoriesMap.map((item) => Category.fromJson(item)).toList();
   }
 
-  ///Add a category into the database
   void addCategory(Category category) async {
     await database.transaction((txn) async {
       var id1 = await txn.rawInsert('''
@@ -27,7 +22,6 @@ class CategoryRepositoryImpl implements CategoryRepository {
     });
   }
 
-  ///Update an existent category into the database
   void updateCategory(Category category) async {
     await database.transaction((txn) async {
       var id1 = await txn.rawUpdate(
@@ -37,7 +31,6 @@ class CategoryRepositoryImpl implements CategoryRepository {
     });
   }
 
-  ///Delete an existent category into the database
   void deleteCategory(Category category) async {
     await database.transaction((txn) async {
       var id1 = await txn.rawDelete(
