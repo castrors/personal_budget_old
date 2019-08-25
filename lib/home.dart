@@ -12,15 +12,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex = 0;
 
-  final _children = [RecordList(), CategoryList(), ReportList()];
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Personal Budget',
       theme: ThemeData(primarySwatch: Colors.pink, primaryColor: Colors.teal),
       home: Scaffold(
-        body: _children[_currentIndex],
+        body: [ReportList(), CategoryList(), ReportList()][_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(

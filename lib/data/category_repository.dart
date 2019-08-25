@@ -7,7 +7,7 @@ class CategoryRepository {
   Database database;
 
   ///Constructor
-  CategoryRepository({this.database});
+  CategoryRepository(this.database);
 
   ///Provide a list of categories
   Future<List<Category>> getCategories() async {
@@ -30,7 +30,7 @@ class CategoryRepository {
   Future<Category> updateCategory(Category category) async {
     return await database.transaction((txn) async {
       var id1 = await txn.rawUpdate(
-          'UPDATE Category SET title = ?, color = ? WHERE id = ?',
+          'UPDATE Category SET title = ?, color = ? WHERE category_id = ?',
           ['${category.title}', '${category.color}', '${category.id}']);
       print('updated1: $id1');
     });
@@ -40,7 +40,7 @@ class CategoryRepository {
   Future<Category> deleteCategory(Category category) async {
     return await database.transaction((txn) async {
       var id1 = await txn
-          .rawDelete('DELETE FROM Category WHERE id = ?', ['${category.id}']);
+          .rawDelete('DELETE FROM Category WHERE category_id = ?', ['${category.id}']);
       print('deleted: $id1');
     });
   }

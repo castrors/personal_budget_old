@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:personal_budget/bloc/blocs.dart';
 import 'package:personal_budget/main.dart';
 import 'package:personal_budget/models/category.dart';
 import 'package:personal_budget/models/record.dart';
@@ -14,8 +13,7 @@ class RecordList extends StatefulWidget {
 }
 
 class _RecordListState extends State<RecordList> {
-  RecordBloc _recordBloc;
-  CategoryBloc _categoryBloc;
+  
   List<Category> categories;
 
   void _navigateToRecordDetail(Record record) async {

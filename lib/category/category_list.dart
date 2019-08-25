@@ -1,9 +1,13 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:personal_budget/bloc/blocs.dart';
 import 'package:personal_budget/category/category_detail.dart';
 import 'package:personal_budget/main.dart';
 import 'package:personal_budget/models/category.dart';
+import 'package:personal_budget/models/category_data_provider.dart';
+import 'package:provider/provider.dart';
 
 ///CategoryList
 class CategoryList extends StatefulWidget {
@@ -12,7 +16,7 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> {
-  CategoryBloc _categoryBloc;
+  // CategoryBloc _categoryBloc;
 
   void _navigateToCategoryDetail(Category category) async {
     final categoryResult = await Navigator.push(
@@ -24,18 +28,18 @@ class _CategoryListState extends State<CategoryList> {
 
     if (categoryResult != null) {
       if (categoryResult.id != null) {
-        _categoryBloc.dispatch(UpdateCategory(category: categoryResult));
+        Provider.of<CategoryDataProvider>(context)
+            .updateCategory(categoryResult);
       } else {
-        _categoryBloc.dispatch(AddCategory(category: categoryResult));
+        Provider.of<CategoryDataProvider>(context).addCategory(categoryResult);
       }
-      _categoryBloc.dispatch(FetchCategory());
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    _categoryBloc = App.of(context).categoryBloc;
-    _categoryBloc.dispatch(FetchCategory());
+    // _categoryBloc = App.of(context).categoryBloc;
+    // _categoryBloc.dispatch(FetchCategory());
     return Scaffold(
       appBar: AppBar(
         title: Text('Categorias'),
@@ -57,28 +61,22 @@ class _CategoryListState extends State<CategoryList> {
               )),
           Flexible(
               flex: 3,
-              child: BlocBuilder(
-                bloc: _categoryBloc,
-                builder: (_, state) {
-                  if (state is CategoryEmpty) {
-                    return Center(child: Text('RecordEmpty'));
-                  }
-                  if (state is CategoryLoading) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  if (state is CategoryLoaded) {
-                    final categories = state.categories;
-                    return ListView.builder(
-                        itemCount: categories.length,
-                        itemBuilder: (context, index) {
-                          return provideListItem(categories[index]);
-                        });
-                  }
-                  if (state is RecordError) {
-                    return Center(child: Text('RecordError'));
-                  }
-                },
-              ))
+              child: Consumer<CategoryDataProvider>(
+                  builder: (context, categoryData, child) {
+                return FutureBuilder<UnmodifiableListView<Category>>(
+                  future: categoryData.categories,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (context, index) {
+                            return provideListItem(snapshot.data[index]);
+                          });
+                    }
+                    return CircularProgressIndicator();
+                  },
+                );
+              }))
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -91,14 +89,13 @@ class _CategoryListState extends State<CategoryList> {
 
   Widget provideListItem(Category category) {
     return Dismissible(
-      key: Key(category.title),
       onDismissed: (direction) {
-        _categoryBloc.dispatch(DeleteCategory(category: category));
-        _categoryBloc.dispatch(FetchCategory());
+        Provider.of<CategoryDataProvider>(context).deleteCategory(category);
 
         Scaffold.of(context).showSnackBar(
             SnackBar(content: Text("${category.title} removida com sucesso.")));
       },
+      key: Key(category.title),
       child: ListTile(
         title: Text(
           category.title.toUpperCase(),
