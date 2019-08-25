@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:personal_budget/category/category_list.dart';
 import 'package:personal_budget/jar/jar_list.dart';
 import 'package:personal_budget/record/record_list.dart';
-import 'package:personal_budget/report/report_list.dart';
 
-/// Widget that contains the bottom navigation bar behavior
 class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
