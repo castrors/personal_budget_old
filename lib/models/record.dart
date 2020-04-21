@@ -15,8 +15,7 @@ class Record extends Equatable {
       this.description,
       this.category,
       this.date,
-      this.isExpense = true})
-      : super([id, amount, description, category, date, isExpense]);
+      this.isExpense = true});
 
   factory Record.fromJson(Map<String, dynamic> data) => Record(
       id: data['record_id'],
@@ -35,4 +34,8 @@ class Record extends Equatable {
         'date': date,
         'is_expense': isExpense,
       };
+
+  @override
+  List<Object> get props =>
+      [id, amount, description, category, date, isExpense];
 }

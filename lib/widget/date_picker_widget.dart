@@ -11,11 +11,9 @@ class DatePickerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DateTimePickerFormField(
+    return DateTimeField(
         initialValue: record != null ? record.date : null,
-        inputType: InputType.date,
         format: DateFormat('yyyy-MM-dd'),
-        editable: true,
         decoration:
             InputDecoration(labelText: 'Data', hasFloatingPlaceholder: false),
         validator: (value) {
@@ -24,6 +22,13 @@ class DatePickerWidget extends StatelessWidget {
                 ? '''Por favor, selecione a data da sua despesa.'''
                 : 'Por favor, selecione a data da sua receita.';
           }
+        },
+        onShowPicker: (context, currentValue) {
+          return showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
         },
         onSaved: onSaveCallback);
   }

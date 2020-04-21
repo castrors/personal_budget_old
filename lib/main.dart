@@ -8,18 +8,19 @@ import 'package:personal_budget/models/record_data.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   final database = await SqfliteDatabase().createDatabase();
 
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          builder: (_) => CategoryData(
+          create: (_) => CategoryData(
             CategoryRepositoryImpl(database),
           ),
         ),
         ChangeNotifierProvider(
-          builder: (_) => RecordData(
+          create: (_) => RecordData(
             RecordRepositoryImpl(database),
           ),
         )
